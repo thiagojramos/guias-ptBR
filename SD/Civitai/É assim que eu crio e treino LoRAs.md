@@ -3,6 +3,7 @@
 ![This is how I create and train LoRAs](https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/4328e77a-17a3-4a49-a644-fc53a8b3ff13/width=400/4328e77a-17a3-4a49-a644-fc53a8b3ff13.jpeg)
 
 -Tags: `#training guide`, `#lora guide`
+
 -Autor: [**Skullkid**](https://civitai.com/user/Skullkid)
 
 <p></p>
