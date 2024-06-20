@@ -8,941 +8,995 @@
 ---
 <p></p>
 
-Originalmente um guia no Discord que escrevi, estas são minhas dicas para a galera do Civit. Com tantos guias desatualizados e/ou com informações incorretas, espero que este seja útil para treinadores aspirantes e atuais.
+Originalmente um guia copiado e colado do Discord que escrevi, essas são minhas impressões para o pessoal do Civit. Com tantos guias desatualizados e/ou com informações incorretas, espero que isso seja útil tanto para aspirantes quanto para treinadores atuais.
 
-Lembre-se de que isso é baseado no meu próprio fluxo de trabalho e experiências _pessoais_! Provavelmente não será perfeito, e não planejo fazer disso uma enciclopédia absoluta. Apenas um bom e velho guia rápido para você começar - embora tenha evoluído para algo parecido com um manual agora.
+Lembre-se de que isso é baseado no meu próprio fluxo de trabalho _pessoal_ e experiências! Provavelmente não será de forma alguma perfeito, e não pretendo fazer disso uma enciclopédia absoluta. Apenas um bom e velho curso rápido para você começar -   embora tenha evoluído para algo parecido com um manual agora.
 
-Vou assumir que você tem um sistema capaz de treinar localmente. (Embora isso _teoricamente_ deva ser aplicável em outros ambientes de treinamento.)
+Também vou assumir que você tem um sistema suficientemente capaz para treinamento local. (Embora isso _teoricamente_ deva ser aplicável principalmente para treinamentos em outros ambientes.)
 
 Dito isso, este guia assumirá que você ainda não reuniu um conjunto de dados, então vamos mergulhar nisso!
 
-**Aviso:** Jogue fora tudo o que você aprendeu naquele vídeo do YouTube do Senhor Genérico AI postado há 3 meses - o YouTube está _sempre_ atrasado/desatualizado, não se confunda.
+**Aviso:** Jogue fora tudo o que você aprendeu daquele vídeo do YouTube do Sr. Genérico AI postado há 3 meses -   YouTube está _sempre_ desatualizado, não se confunda.
 
 ## Parte 1 | Conjuntos de Dados: Coleta e Noções Básicas
 
-Seu conjunto de dados é **O ASPECTO MAIS IMPORTANTE** do seu LoRA, sem dúvidas. **<u>Um conjunto de dados ruim produzirá um LoRA ruim todas as vezes, independentemente das suas configurações.</u>** Dados ruins produzem resultados ruins!
+Seu conjunto de dados é **O ASPECTO MAIS IMPORTANTE** do seu LoRA, sem dúvida. **<u>Um conjunto de dados ruim produzirá um LoRA ruim todas as vezes, independentemente de suas configurações.</u>** Dados ruins entram, dados ruins saem!
 
-Idealmente, treinar um bom LoRA usará um número decente de imagens: Para SD1.5, recomendo cerca de 30 imagens, com um mínimo de 15: Mas já usei apenas 8 e obtive um resultado 'decente'.
+Idealmente, treinar um bom LoRA usará um número decente de imagens: Para SD1.5, recomendo ~30 imagens, com um mínimo de ~15: Mas já usei apenas 8 e obtive um resultado 'decente'.
 
-Para SDXL, tive mais sorte com cerca de 20 imagens, com um mínimo de 12. Algumas pessoas encontraram maneiras razoáveis de fazer treinamentos com uma única imagem no XL, mas ainda não tentei isso.
+Para SDXL, tive a melhor sorte com ~20 imagens, com um mínimo de ~12. Algumas pessoas encontraram maneiras razoavelmente boas de fazer treinamentos de imagem única no XL, mas ainda não tentei isso.
 
-Dito isso, você pode usar mais ou menos imagens do que meus números recomendados, mas, de modo geral, esses são bons valores para se almejar - mas não sature demais seu conjunto de dados! Ter **muitas** imagens vai desacelerar desnecessariamente seu treinamento para retornos rapidamente decrescentes, e dependendo do conteúdo pode te dar mais problemas do que vale. Se você estiver tendo dificuldade em conseguir um conjunto de dados grande o suficiente, não se preocupe muito, pois há um método para expandir artificialmente seu conjunto de dados, mas falaremos sobre isso mais tarde.
+Dito isso, você pode usar mais ou menos do que os números recomendados por mim, mas, de modo geral, esses são alguns bons valores para seguir -   mas não sobrecarregue seu conjunto de dados! Ter **muitas** imagens desnecessariamente vai atrasar seu treinamento para retornos rapidamente decrescentes, e dependendo do conteúdo pode te dar mais problemas do que vale a pena. Se você estiver tendo dificuldades para obter um conjunto de dados grande o suficiente, não se preocupe muito, pois há um método para expandir artificialmente seu conjunto de dados, mas abordaremos isso mais tarde.
 
-Ao reunir suas imagens, garanta que você priorize a qualidade sobre a quantidade. Um conjunto bem curado de 30 imagens pode facilmente superar um conjunto de 100 imagens pobres e medianas. Especialmente em conjuntos de dados menores, uma única imagem "ruim" pode desestabilizar todo o modelo de uma maneira horrível. Dito isso, imagens ruins _PODEM_ ser usadas para completar um conjunto de dados, mas devem ser devidamente marcadas (como com "esboço colorido", que será discutido mais tarde).
+Ao montar suas imagens, certifique-se de priorizar a qualidade em vez da quantidade. Um conjunto bem curado de 30 imagens pode facilmente superar um conjunto de 100 imagens ruins e medianas. Especialmente em conjuntos de dados menores, uma única imagem "ruim" pode desestabilizar todo o modelo de uma forma terrível. Dito isso, imagens ruins _PODEM_ ser usadas para preencher um conjunto de dados, mas devem ser devidamente marcadas (como com "esboço colorido", que será abordado mais tarde).
 
-Você também deve garantir que suas imagens sejam variadas. Muitas imagens de um estilo similar/igual tentarão se incorporar ao seu conceito, dificultando a mudança de estilo e tornando qualquer alteração de estilo tendenciosa. Especialmente quando se lida com muitas capturas de tela e renderizações, você deve ter cuidado. Se você tiver uma quantidade significativa, marcá-las com o artista que as fez, como uma renderização, etc., pode ajudar a associar o estilo a outra etiqueta e reduzir o impacto. Por outro lado, estilos incrivelmente distintos/poderosos podem influenciar o estilo geral aprendido, mesmo em pequenas quantidades, então recomendo marcá-los também.
+Você também deve garantir que suas imagens sejam variadas. Muitas imagens de um estilo similar/igual tentarão incorporar esse estilo no seu conceito, tornando a mudança de estilo excepcionalmente difícil, e fazendo qualquer mudança de estilo tendenciosa. Especialmente ao lidar com muitas capturas de tela e renderizações, você deve ser cuidadoso. Se você tiver uma quantidade significativa, marcá-las com o nome do artista que as fez, como uma renderização, etc., pode ajudar a vincular o estilo a outra tag e reduzir o impacto. Por outro lado, estilos incrivelmente distintos/poderosos podem influenciar o estilo aprendido geral, mesmo em pequenas quantidades, então recomendo marcá-los também.
 
-Eu também recomendaria evitar imagens com temas fetichistas ao trabalhar com personagens (a menos que você queira isso em seu LoRA), pois mesmo quando marcadas, sua anatomia frequentemente extrema pode distorcer seu modelo de uma maneira pior do que se elas não estivessem presentes. Você _pode_, claro, usá-las para expandir seu conjunto de dados se realmente precisar, mas certifique-se de que estão **bem** marcadas.
+Eu também recomendaria evitar imagens com temas fetichistas ao trabalhar com personagens (a menos que você queira isso no seu LoRA), pois, mesmo quando marcadas, sua anatomia frequentemente extrema pode distorcer seu modelo de uma forma pior do que se não estivessem presentes. Você _pode_, claro, usá-las para expandir seu conjunto de dados se realmente precisar, mas certifique-se de que estejam **minuciosamente** marcadas.
 
-Pessoalmente, eu obtenho meus dados de uma variedade de sites: e621, furaffinity, deviantart, pixiv e o wiki do monster hunter (e wikis de jogos em geral) são minhas fontes comuns. Novamente, certifique-se de evitar puxar muito do mesmo artista e estilos similares. A pesquisa de imagens do Google também vale a pena ser observada se você precisar de mais dados, pois muitas vezes pode encontrar instâncias isoladas do reddit, feeds da comunidade steam e outros sites que você pode não ter pensado em olhar.
+Pessoalmente, reúno meus dados de uma variedade de sites: e621, furaffinity, deviantart, pixiv e a wiki do monster hunter (e wikis de jogos em geral) são minhas fontes comuns. Novamente, certifique-se de evitar pegar muito do mesmo artista e estilos semelhantes. A busca de imagens no Google também vale a pena se você precisar de mais dados, pois pode frequentemente encontrar instâncias isoladas do Reddit, feeds da comunidade Steam e outros sites que você pode não ter pensado em procurar.
 
-Pixiv é uma bênção para monster hunter e outras franquias orientais como um site de arte japonês, mas encontrar especificidades pode ser difícil às vezes, pois você precisa usar texto em japonês para garantir sua busca. Felizmente, várias wikis também incluem nomes japoneses, se aplicável. _Nota: A partir de 25/04/24, o Pixiv bloqueou 'conteúdo sensível' nos EUA e no Reino Unido - Isso pode ser contornado configurando a região da sua conta para qualquer lugar fora desses locais, caso você se importe em usar esse conteúdo para treinamento._
+Pixiv é uma dádiva para monster hunter e outras franquias orientais como um site de arte japonês, mas encontrar específicos pode ser difícil às vezes, pois você precisa usar texto em japonês para garantir sua busca. Felizmente, várias wikis também incluem nomes em japonês, se aplicável. _Nota: A partir de 25/04/24, o Pixiv bloqueou 'conteúdo sensível' nos EUA e no Reino Unido -   Isso pode ser contornado definindo a região da sua conta para qualquer lugar fora desses locais, caso você se importe em usar esse conteúdo para treinamento._
 
-À medida que você reúne suas imagens, deve considerar o que deseja treinar: Um personagem? Um estilo? Um objeto? Algumas roupas?
+À medida que você coleta suas imagens, deve considerar o que deseja treinar: Um personagem? Um estilo? Um objeto? Algumas roupas?
 
-Para a maioria desses, você deve procurar principalmente por imagens solo do assunto em questão. Duos/trios também funcionam, mas você deve pegá-los apenas se seu assunto principal estiver em grande parte desobstruído. Alternativamente, indivíduos extras podem ser facilmente removidos ou recortados. Se você incluir imagens de vários personagens, certifique-se de que estejam devidamente e completamente marcadas. Incluir duo/trios/etc _pode_ ser benéfico para usar seu LoRA em gerações de vários personagens, mas não é necessário de forma alguma.
+Para a maioria desses, você deve procurar principalmente imagens solo do sujeito em questão. Duos/Trios também funcionam, mas você deve pegá-los apenas se o seu assunto principal estiver amplamente desobstruído. Alternativamente, indivíduos extras podem ser facilmente removidos ou cortados. Se você incluir imagens de vários personagens, certifique-se de que estejam devidamente e minuciosamente marcadas. Incluir duos/trios/etc _pode_ ser benéfico para usar seu LoRA em gerações de vários personagens, mas não é necessário de forma alguma.
 
-Se você está planejando treinar um estilo, saiba que eles são mais avançados e são mais adequados para LyCORIS do que LoRA. Este guia ainda será amplamente aplicável, mas confira as partes posteriores para detalhes específicos deles.
+Se você planeja treinar um estilo, saiba que esses são mais avançados e são mais adequados para LyCORIS do que LoRA. Este guia ainda será amplamente aplicável, mas confira as partes posteriores para detalhes específicos sobre eles.
 
 Depois de ter suas imagens, coloque-as em uma pasta para preparação na próxima parte. (Por exemplo, "Pastas de Treinamento/Pasta de Conceito/Bruto")
 
 ## Parte 2 | Conjuntos de Dados: Preparação
 
-Depois de ter suas imagens brutas da parte 1, você pode começar a pré-processá-las para deixá-las prontas para o treinamento. Você precisará de um programa de edição de fotos: Recomendo o Photopea como uma alternativa gratuita ao Photoshop. [Paint.net](http://paint.net/) e Krita também são opções válidas.
+Depois de ter suas imagens brutas da parte 1, você pode começar a pré-processá-las para prepará-las para o treinamento. Você precisará de um programa editor de fotos: Recomendo o Photopea como uma alternativa web gratuita ao Photoshop. [Paint.net](http://paint.net/) e Krita também são opções válidas.
 
-Pessoalmente, eu separo minhas imagens em dois grupos: Imagens que estão ok por conta própria e imagens que requerem algum tipo de edição antes de serem usadas. As que atendem aos critérios abaixo são movidas para outra pasta e editadas conforme necessário.
+Pessoalmente, separo minhas imagens em dois grupos: Imagens que estão ok por conta própria e imagens que precisam de algum tipo de edição antes do uso. As que atendem aos critérios abaixo são movidas para outra pasta e editadas conforme necessário.
 
-Dê uma olhada na extensão das suas imagens. Imagens **.webp** (geralmente retiradas de wikis) são incompatíveis com os treinadores atuais e **devem ser convertidas para PNG ou JPEG**. Enquanto você faz isso, note que **imagens com fundos transparentes** também causam problemas. Elas devem ser levadas ao seu editor de imagem de escolha e devem receber um fundo. Eu recomendaria usar várias cores sólidas, se você tiver mais de uma - a variação de fundo pode ser incrivelmente útil. Alternar entre branco/preto/azul/verde/vermelho/etc. e marcá-los como tal pode ajudar seu treinamento se os fundos estiverem causando problemas, e em geral.
+Dê uma olhada na extensão de suas imagens. Imagens **.webp** (geralmente retiradas de wikis) são incompatíveis com os treinadores atuais e **devem ser convertidas para PNG ou JPEG**. Ao fazer isso, observe que **imagens com fundos transparentes** também causam problemas. Estas devem ser levadas ao seu editor de imagens de escolha e devem receber um fundo. Recomendo usar várias cores sólidas, se tiver mais de uma -   a variação de fundo pode ser incrivelmente útil. Alternar entre branco/preto/azul/verde/vermelho/etc e marcá-los como tal pode ajudar seu treinamento se os fundos estiverem causando problemas, e de forma geral.
 
-Em seguida, considere a resolução do seu treinamento. Resoluções mais altas permitem obter mais detalhes de uma imagem, mas irão desacelerar seu tempo de treinamento. Usando o SD1.5, a maioria das pessoas treina em **512 ou 768**, mas resoluções intermediárias também são aplicáveis, como treinar em 704 se você não conseguir treinar em 768.
+Em seguida, considere a resolução do seu treinamento. Resoluções mais altas permitem obter mais detalhes de uma imagem, mas vão desacelerar o tempo de treinamento. Usando SD1.5, a maioria das pessoas treina em **512 ou 768**, mas resoluções intermediárias também são aplicáveis, como treinar em 704 se você não conseguir 768.
 
-Se você estiver usando o SDXL, sua resolução _mínima_ deve ser pelo menos 1024, o que quase todos treinam.
+Se você estiver usando SDXL, sua resolução _mínima_ deve ser de pelo menos 1024, que quase todos treinam.
 
-**Qualquer imagem maior que sua resolução será redimensionada automaticamente.** A resolução será detalhada mais adiante.
+**Qualquer imagem que seja maior que sua resolução será redimensionada automaticamente.** A resolução será detalhada mais adiante.
 
-Depois de ter uma ideia da sua resolução, dê uma olhada no seu conjunto de dados. Lembre-se de que imagens não quadradas serão redimensionadas para manter suas proporções (com base na resolução do bucket), então ter **muito fundo vazio** pode ser prejudicial para obter detalhes. Imagens largas e altas com muito fundo vazio podem ser **recortadas para focar no assunto**.
+Depois de ter uma ideia da sua resolução, observe seu conjunto de dados. Lembre-se de que imagens não quadradas serão redimensionadas para manter suas proporções (com base na resolução do bucket), então ter **muito fundo vazio** pode ser prejudicial para obter detalhes. Imagens largas e altas com muito fundo vazio podem ser **recortadas para focar no sujeito**.
 
-Além disso, se você tiver **imagens de alta resolução com várias representações** do seu assunto (como uma folha de referência), você pode **recortar a imagem em várias partes** para treiná-la em várias imagens em vez de uma única imagem excessivamente comprimida. Tais imagens também podem ser treinadas sem cortar e recortar, apenas certifique-se de marcá-las com "várias vistas" e "folha de referência" mais tarde.
+Além disso, se você tiver **imagens de alta resolução com várias representações** do seu sujeito (como uma folha de referência), você pode **recortar a imagem em várias partes** para que ela seja treinada em várias imagens em vez de uma única super comprimida. Essas imagens também podem ser treinadas sem cortes e recortes, apenas certifique-se de marcá-las com "várias vistas" e "folha de referência" mais tarde.
 
-Imagens com pessoas além do assunto devem ser focadas no assunto se você planeja usá-las como estão, ou se planeja transformá-las em imagens solo, edite os outros assuntos se possível, seja por recorte ou remoção.
+Imagens com pessoas além do sujeito devem estar focadas no sujeito se você planeja usá-las como estão, ou se planeja transformá-las em imagens solo, remova os outros sujeitos se possível, seja via recorte ou remoção.
 
-Embora não seja necessário, elementos sobrepostos, como texto, balões de fala e linhas de movimento, podem ser removidos. Você deve lembrar que a IA aprende com a repetição, e o mesmo elemento no mesmo local em várias imagens será algo que ela tentará manter. Está tudo bem se um punhado tiver isso
+Embora não seja necessário, elementos sobrepostos como texto, balões de fala e linhas de movimento podem ser removidos. Você deve lembrar que a IA aprende com repetição, e o mesmo elemento no mesmo lugar em várias imagens será algo que ela tentará manter. Está tudo bem se algumas poucas imagens tiverem isso, mas idealmente você quer o mínimo de repetição possível entre elas, e aquelas que não podem ser removidas mas repetem com frequência devem ser marcadas. Como a repetição é fundamental, outliers (geralmente) têm menos probabilidade de permanecer. A ferramenta de borracha mágica é muito útil para qualquer um desses casos que não estejam em um fundo de cor plana.
 
-, mas idealmente você quer o mínimo de repetição entre elas, e aqueles que não podem ser removidos, mas se repetem com frequência, devem ser marcados. Como a repetição é a chave, os outliers são (geralmente) menos propensos a se manter.
+Se você tiver imagens menores que sua resolução de treinamento, considere ampliá-las. Ampliadores como 4x_Ultrasharp são ótimos para isso. Pessoalmente, tenho usado 4x_foolhardy_Romacri.
 
-Se você tiver imagens menores que sua resolução de treinamento, considere aumentá-las. Ferramentas de aumento como 4x\_Ultrasharp são ótimas para isso. Pessoalmente, tenho usado 4x\_foolhardy\_Remacri.
+Se você tiver imagens **maiores que 3k pixels, reduza-as para 3k ou menos.** Aparentemente, o treinador Kohya tem alguns pequenos problemas ao lidar com imagens muito grandes -   não tenho certeza do porquê, mas reduzir imagens superdimensionadas no meu conjunto de dados mostrou alguma melhoria.
 
-Se você tiver imagens **maiores que 3000 pixels, redimensione para 3000 ou menos.** Aparentemente, o treinador Kohya tem alguns problemas menores ao lidar com imagens muito grandes - não tenho certeza do porquê, mas redimensionar imagens muito grandes no meu conjunto de dados mostrou alguma melhoria.
+Por fim, se você tiver um sujeito com detalhes assimétricos (como uma marca, logo, braço robótico único, etc), certifique-se de que está virado para o mesmo lado em cada imagem. Imagens orientadas incorretamente devem ser invertidas para consistência. Se este for o caso, certifique-se de _não_ ativar a "aumentação de inversão", detalhada mais adiante.
 
-Por fim, se você tiver um assunto com detalhes assimétricos (como uma marca, logo, braço robótico único, etc.), certifique-se de que esteja voltado para o mesmo lado em cada imagem. Imagens orientadas incorretamente devem ser invertidas para consistência. Nesse caso, certifique-se de _não_ ativar "flip augmentation", detalhado mais adiante.
+Depois de fazer o seguinte, coloque _todas_ as suas imagens que você editou, e as imagens que você não editou, em uma nova pasta assim: "Pastas de Treinamento/Pasta de Conceito/X_NomeDoConceito" o 'NomeDoConceito' será seu token de instância (o que você vai usar no prompt), e o 'X' será o número de repetições da pasta por época, que será detalhado mais adiante. Deve parecer algo como "1_Hamburger".
 
-Depois de fazer o seguinte, coloque _todas_ as suas imagens editadas e as imagens que você não editou em uma nova pasta assim: "Pastas de Treinamento/Pasta de Conceito/X\_NomeDoConceito". O 'NomeDoConceito' será seu token de instância (o que você vai colocar no prompt), e o 'X' será o número de repetições na pasta por época, que será detalhado mais tarde. Deve ficar algo como "1\_Hamburger".
+## Parte 2.5 | Conjuntos de Dados: Curando Venenos
 
-## Parte 2.5 | Conjuntos de Dados: Curando o Veneno
+Como o Nightshade especialmente está ganhando muita tração agora, acho que vou colocar uma seção aqui cobrindo imagens "envenenadas". Você não encontrará essas com muita frequência, mas é bastante possível à medida que aumentam em popularidade.
 
-Como o Nightshade especialmente está ganhando muita tração agora, acho que devo colocar uma seção aqui cobrindo imagens "envenenadas". Você não vai encontrá-las com muita frequência, mas é bem possível à medida que ganham popularidade.
+O propósito de ferramentas de envenenamento de imagens como Glaze e Nightshade é adicionar "ruído adversarial" a uma imagem, o que interrompe o processo de aprendizado, efetivamente adicionando outliers insanos e obscurecendo os dados originais que ela treinaria. Como tal, incluir uma imagem envenenada no seu conjunto de dados pode resultar em anomalias estranhas, seja variações de cor, anatomia distorcida, etc. Quanto mais veneno você tiver, piores serão os efeitos. Idealmente, você não tem nenhum -   mas você PODE ainda usá-las.
 
-O propósito de ferramentas de envenenamento de imagens como Glaze e Nightshade é adicionar "ruído adversarial" a uma imagem, o que interrompe o processo de aprendizado ao adicionar essencialmente outliers insanos e obscurecer os dados originais nos quais ela treinaria. Como tal, incluir uma imagem envenenada em seu conjunto de dados pode resultar em anomalias estranhas, sejam variações de cor, anatomia distorcida, etc. Quanto mais veneno você tiver, piores serão os efeitos. Idealmente, você não terá nenhum - mas AINDA PODE usá-los.
+Esses "venenos" têm uma fraqueza hilária -   o próprio ruído que estão introduzindo. Simplesmente pegando a imagem desejada e passando por um ampliador de IA bom em remover ruído (como com artefatos jpeg ou algo do tipo), ou até mesmo um ampliador geral, você pode simplesmente... remover o veneno. É fácil assim, geralmente. As pessoas ainda estão experimentando com os "melhores" métodos de remoção, mas francamente, especialmente com o Nightshade, praticamente qualquer método pode limpar a imagem para um estado utilizável.
 
-Esses "venenos" têm uma fraqueza hilária - o próprio ruído que estão introduzindo. Simplesmente pegando a imagem desejada e colocando-a em um upscaler de IA bom em remover ruído (como com artefatos jpeg ou algo do tipo), ou mesmo apenas um upscaler geral, você pode simplesmente... remover o veneno. É tão fácil, geralmente. As pessoas ainda estão experimentando os "melhores" métodos de remoção, mas, francamente, especialmente com o Nightshade, praticamente qualquer método pode limpar a imagem para um estado utilizável.
+Ampliadores de "suavização" ou "anti-artefato" funcionam melhor para o trabalho, usados com um dos dois métodos a seguir:  
+A: Basta ampliá-lo. 2x geralmente é suficiente.  
+B: Reduza para metade ou 3/4 do tamanho e, em seguida, amplie com IA. Funciona melhor com imagens já grandes, imagens de resolução pequena perderiam muito detalhe.
 
-Upscalers de "Smoothing" ou "anti-artifact" funcionam melhor para o trabalho, usados com um dos dois métodos a seguir:  
-A: Apenas aumente a escala. 2x geralmente é suficiente.  
-B: Reduza a escala para metade ou 3/4 do tamanho, depois aumente com IA. Funciona melhor com imagens já grandes, imagens de resolução pequena perderiam muitos detalhes.
-
-Alternativamente, "adverse cleaner" pode fazer um trabalho decente, e existe como uma [extensão para A1111](https://github.com/gogodr/AdverseCleanerExtension) ou como um [HF Space](https://huggingface.co/spaces/p1atdev/AdverseCleaner). Combinado com os métodos de upscaling acima, você pode neutralizar efetivamente o "veneno" por completo.
+Alternativamente, "limpador adverso" pode fazer um trabalho decente e existe como uma [extensão para A1111](https://github.com/gogodr/AdverseCleanerExtension) ou como um [HF Space](https://huggingface.co/spaces/p1atdev/AdverseCleaner). Combinado com os métodos de ampliação acima, você pode neutralizar efetivamente o "veneno" completamente.
 
 "Mas como eu reconheço uma imagem envenenada?"
 
-Depende de quão agressivamente o trabalho foi envenenado - se parece uma porcaria porque parece que uma criança de 3 anos colocou um filtro de câmera engraçado nela, ou tem alguns artefatos bastante óbvios, ou parece que toda a imagem está coberta de um artefato de compressão Jpeg - É 9/10 vezes envenenada. Venenos menos agressivos são mais difíceis de detectar, mas têm menos impacto no seu treinamento. Se você não tiver certeza, dê uma olhada de perto em um editor de fotos, e/ou apenas passe pelos métodos de limpeza antes para estar seguro.
+Depende de quão agressivamente o trabalho foi envenenado -   Se parece ruim porque parece que uma criança de 3 anos colocou um filtro de câmera bobo nela, ou tem alguns artefatos bem óbvios, ou parece que a imagem inteira está coberta de um artefato de compressão Jpeg -   É 9/10 vezes envenenada. Venenos menos agressivos são mais difíceis de detectar, mas têm menos impacto no seu treinamento. Se você não tiver certeza, dê uma olhada de perto em um editor de fotos e/ou apenas passe pelos métodos de limpeza antes para estar seguro.
 
-Como uma nota geral, os indivíduos que colocam venenos hiper-agressivos em seu trabalho geralmente são tão delirantes que sua arte nem vale a pena usar em primeiro lugar - Artistas que se respeitam geralmente mantêm o veneno mínimo para não afetar seu trabalho visualmente de maneira significativa, ou simplesmente não usam. Se você não quiser lidar com veneno, puxe seus dados de imagens mais antigas se quiser estar totalmente seguro, ou apenas aprenda a identificar venenos e pule por eles.
+Como uma nota geral, os indivíduos que colocam venenos hiperagressivos em seu trabalho geralmente são delirantes o suficiente para que sua arte nem valha a pena ser usada em primeiro lugar -   Artistas que se respeitam geralmente mantêm o veneno mínimo para não afetar visualmente seu trabalho de maneira significativa, ou simplesmente não usam. Se você não quiser lidar com veneno, tire seus dados de imagens mais antigas se quiser estar totalmente seguro, ou simplesmente aprenda a identificar venenos e passe por cima deles.
 
 ## Parte 3 | Conjuntos de Dados: Marcação
 
 Quase terminamos com o conjunto de dados! Estamos na etapa final agora, a marcação. Isso definirá seu token de instância e determinará como seu LoRA será usado.
 
-Existem várias maneiras de fazer sua marcação e uma infinidade de programas para ajudar na marcação ou fazer a marcação automática. No entanto, na minha _opinião_ pessoal, você não deve usar marcação automática (_especialmente_ em designs e assuntos específicos) pois isso dá mais trabalho do que ajuda. (No entanto, os marcadores automáticos estão melhorando rapidamente.)
+Existem várias maneiras de fazer sua marcação, e uma infinidade de programas para auxiliar na marcação ou fazer a marcação automática. No entanto, na minha opinião _pessoal_, você não deve usar marcação automática (_especialmente_ em designs e temas específicos), pois isso dá mais trabalho do que ajuda. (No entanto, os marcadores automáticos estão melhorando rapidamente.)
 
-Pessoalmente, uso o [Booru Dataset Tag Manager](https://github.com/starik222/BooruDatasetTagManager) e marco todas as minhas imagens manualmente. Você PODERIA marcar sem um programa, mas simplesmente... **não faça isso.** Criar, nomear e preencher manualmente um .txt para cada imagem **não** é algo que você quer fazer com seu tempo.
+Pessoalmente, uso o [Booru Dataset Tag Manager](https://github.com/starik222/BooruDatasetTagManager) e marco todas as minhas imagens manualmente. Você PODERIA marcar sem um programa, mas simplesmente... **não faça isso.** Criar, nomear e preencher manualmente um .txt para cada imagem **não** é o que você quer fazer com seu tempo.
 
-Felizmente, o BDTM tem uma opção legal para adicionar uma marca a todas as imagens do seu conjunto de dados de uma vez, o que torna o início do processo **muito** **mais fácil**.
+Felizmente, o BDTM tem uma opção bacana para adicionar uma tag a todas as imagens do seu conjunto de dados de uma vez, o que torna o início do processo **muito** **mais fácil**.
 
-Antes de marcar, você precisa escolher um modelo para treinar! Para fins de compatibilidade, sugiro que você treine em um **Modelo Base**, que é qualquer ajuste fino que **NÃO seja uma mistura de outros modelos**. Treinar em uma mistura ainda é viável, mas na minha experiência faz com que as saídas sejam menos compatíveis com qualquer coisa que não seja aquele modelo. Se você só quer usar seu LoRA naquele mix específico, está perfeitamente bem treinar nele, no entanto.
+Antes de marcar, você precisa escolher um modelo para treinar! Para fins de compatibilidade, sugiro que você treine em um **Modelo Base**, que é qualquer coisa como um finetune que **NÃO seja uma mistura de outros modelos**. Treinar em uma mistura ainda é viável, mas na minha experiência torna os resultados menos compatíveis com qualquer coisa que não seja aquele modelo. Se você só quer usar seu LoRA naquela mistura específica, você está perfeitamente bem para treinar nela, no entanto.
 
-Agora, para a própria marcação. Antes de fazer _qualquer coisa_, descubra que tipo de tags você usará:
+Agora, para a marcação em si. Antes de fazer _qualquer coisa_, descubra que tipo de tags você usará:
 
--   Atualmente, existem três tipos de estilos de prompting, como segue: Natural Language Prompting, (dan)Booru Tag Prompting e e6 Tag Prompting, que você deve usar com base na "ancestralidade" dos seus modelos.
-    
--   O SD1.5 Base, SDXL Base e (atualmente) a maioria dos modelos SDXL usam o Prompting Natural, ex: "A brown dog sleeping at night, they are very fluffy." Às vezes funciona em outros modelos, mas _não é recomendado_.
-    
--   A grande maioria dos modelos de anime que você vê usam o Booru Prompting, especificamente usando a lista de tags do Danbooru, um image board de anime. Ouvi dizer que Anything v4.5 é uma boa escolha para 1.5.
-    
--   Modelos com ancestralidade baseada em modelos furry usam o e6 prompting, usando a lista de tags do e621. Fluffyrock ou BB95 é uma boa escolha aqui para 1.5. PonyXL é a melhor para suas escolhas de XL.
-    
+-   Atualmente, existem três tipos de estilos de prompt, como segue: Natural Language Prompting, (dan)Booru Tag Prompting, e e6 Tag Prompting, que você deve usar com base na "ascendência" do seu modelo.
+      
+-   O SD1.5 Base, SDXL Base e (atualmente) a maioria dos modelos SDXL usam Natural Prompting, ex: "Um cachorro marrom dormindo à noite, ele é muito fofinho." Às vezes funciona em outros modelos, mas _não é recomendado_.
+      
+-   A grande maioria dos modelos de Anime que você vê usa Booru prompting, especificamente usando a lista de tags do Danbooru, um image board de anime. Ouvi dizer que Anything v4.5 é uma boa escolha para 1.5.
+      
+-   Modelos com ascendência baseada em modelos furry usam e6 prompting, usando a lista de tags do e621. Fluffyrock ou BB95 são boas escolhas aqui para 1.5. PonyXL é a melhor escolha para suas opções XL.
+      
 
 Depois de saber qual modelo e tags você está usando, pode começar a marcar.
 
-**Sua PRIMEIRA tag em CADA imagem deve ser seu token de instância**, também conhecido como o que você nomeou X\_NomeDoConceito, neste caso "nomedoconceito". Se seu modelo já tiver seu assunto remotamente treinado para essa tag, considere mudar seu token de instância para uma string que ele não teria. Por exemplo, "hamburger" poderia ser "hmbrgrlora". Isso nem sempre é necessário, mas se você vir resultados estranhos que derivam da interpretação original do modelo, talvez queira fazer isso.
+**Sua PRIMEIRA tag em TODAS as imagens deve ser seu token de instância**, ou seja, o que você nomeou X_ConceptName, neste caso "conceptname". Se o seu modelo já tiver seu assunto minimamente treinado para aquela tag, considere mudar seu token de instância para uma string que ele não teria. Por exemplo, "hamburger" poderia ser "hmbrgrlora". Isso nem sempre é necessário, mas se você vir resultados estranhos que derivam da interpretação original do modelo, pode querer fazer isso.
 
-**Sua SEGUNDA tag em CADA imagem deve ser seu token de classe**, um "contêiner" geral para seu token de instância. Isso diz à IA o que é seu assunto, geralmente, para ajudar no treinamento. Por exemplo, uma espada é uma "arma", Lola Bunny é um "antropomorfo" e assim por diante. Nem toda imagem precisa ter o mesmo token de classe, no entanto! Frequentemente executo conjuntos de dados mistos, e ter várias classes para um token de instância é perfeitamente ok - desde que seu modelo possa fazer sentido disso.
+**Sua SEGUNDA tag em TODAS as imagens deve ser seu token de classe**, um "container" geral para seu token de instância. Isso diz à IA o que seu assunto é, geralmente, para ajudar no treinamento. Por exemplo, uma espada é uma "arma", Lola Bunny é uma "antro" e assim por diante. Nem todas as imagens precisam ter o mesmo token de classe, no entanto! Muitas vezes eu uso conjuntos de dados mistos, e ter várias classes para um token de instância é perfeitamente ok -   desde que seu modelo possa fazer sentido disso.
 
-Meu processo funciona assim:
+Meu processo funciona mais ou menos assim:
 
--   Adicione a todas as imagens de uma vez: token de instância (geralmente espécie), token de classe (antropomorfo/feral/humano), gênero (se aplicável, ferais não especificados), elementos controláveis (ou seja, uma roupa específica do personagem), nu, outros controláveis comuns (como a cor dos olhos mais comum).
-    
--   Mova para a primeira imagem; Remova se necessário: elementos controláveis. Mude se necessário: nu (para marca(s) geral(is) de roupa), cor dos olhos, etc.
-    
--   Adicione tags que você consideraria "elementos chave" para a imagem: Meios específicos (como aquarela), composicionais (ou seja, retrato de três quartos), etc.
-    
--   Adicione tags para descrever aspectos desviados: seios enormes/hiper, chifres/escamas/pele de cor variada, etc.
-    
--   Repita para cada imagem.
-    
+-   Adicionar a todas as imagens de uma vez: token de instância (geralmente espécie), token de classe (antro/feral/humano), gênero (se aplicável, ferals não especificados), elementos controláveis (ou seja, uma roupa específica do personagem), nudez, outros controláveis comuns (como a cor dos olhos mais comum).
+      
+-   Mover para a primeira imagem; Remover se necessário: elementos controláveis. Alterar se necessário: nudez (para tag(s) de roupa geral), cor dos olhos, etc.
+      
+-   Adicionar tags que você consideraria "elementos-chave" para a imagem: Meios específicos (como aquarela), composições (por exemplo, retrato de três quartos), etc.
+      
+-   Adicionar tags para descrever aspectos desviados: seios enormes/hiper, chifres/escamas/pele de cor variada, etc.
+      
+-   Repetir para cada imagem.
+      
 
-Dito isso, não exagere nas suas tags. Se você usar muitas, vai "sobrecarregar" o treinador e obter resultados menos precisos, pois ele está tentando treinar muitas tags. É geralmente uma boa prática marcar apenas os itens que você consideraria um "elemento chave" da imagem. **Marcar pouco é melhor do que marcar demais, então se estiver em dúvida, mantenha mínimo**. Eu geralmente tenho cerca de 5 a 20 tags por imagem, dependendo de sua complexidade.
+Dito isso, não exagere nas tags. Se usar muitas, você "sobrecarregará" o treinador e obterá resultados menos precisos, pois ele está tentando treinar em muitas tags. É geralmente melhor prática marcar apenas os itens que você consideraria um "elemento-chave" da imagem. **Marcar de menos é melhor do que marcar demais, então em caso de dúvida mantenha o mínimo**. Eu costumo ter ~5-20 tags por imagem, dependendo de sua complexidade.
 
-Fundos e poses podem frequentemente ser ignorados, mas se você tiver tipos específicos de locais/poses/fundos em um número significativo de suas imagens, _deve_ marcá-los para evitar biasing.
+Fundos e poses muitas vezes podem ser ignorados, mas se você tiver tipos específicos de locais/poses/fundos em um número significativo de suas imagens, você _deve_ marcá-los para evitar viés.
 
-Por exemplo, se você tiver muitos fundos brancos, deve marcar "fundo branco". Se após um treinamento você vir uma pose específica sendo padrão, deve encontrar todas as instâncias no seu conjunto de dados usando essa pose e marcá-las.
+Por exemplo, se você tiver muitos fundos brancos, deve marcar "fundo branco". Se após um treinamento você vir uma pose específica sendo padronizada, deve encontrar todas as instâncias no seu conjunto de dados usando aquela pose e marcá-la.
 
-Você também deve ter cuidado com tags "implícitas". Estas são tags que implicam outras tags apenas por sua presença. Ao ter uma tag implícita, você não deve usar a(s) tag(s) que ela implica junto com ela. Por exemplo, "pernas abertas" implica "pernas", "pastor alemão" implica "cão", e assim por diante. Ter as tags que são implicadas por outra espalha o treinamento entre elas, enfraquecendo o efeito do seu treinamento. Em grandes quantidades, isso pode ser bastante prejudicial aos seus resultados finais.
+Você também deve ter cuidado com tags "implícitas". Essas são tags que implicam outras tags apenas por sua presença. Tendo uma tag implícita, você não deve usar a(s) tag(s) que ela implica junto com ela. Por exemplo, "pernas abertas" implica "pernas", "pastor alemão" implica "cachorro", e assim por diante. Ter as tags que são implicadas por outra espalha o treinamento entre elas, enfraquecendo o efeito do seu treinamento. Em grandes quantidades, isso pode ser bastante prejudicial para seus resultados finais.
 
-**Marcando imagens de baixa qualidade:** Às vezes, você simplesmente não tem escolha a não ser usar dados ruins. Esboços rudes, capturas de tela de baixa resolução, anatomia ruim e outros caem nessa categoria.
+**Marcando imagens de baixa qualidade:** Às vezes, você simplesmente não tem escolha a não ser usar dados ruins. Esboços grosseiros, capturas de tela de baixa resolução, anatomia ruim, e outros caem nessa categoria.
 
--   Esboços podem geralmente ser marcados como "esboço colorido" ou "esboço", o que geralmente é tudo o que você precisa fazer. Se não coloridos, "monocromático" e "escala de cinza" geralmente são bons para adicionar também.
-    
--   Imagens de baixa resolução devem ser aumentadas com um upscaler apropriado, se possível, como um dos muitos feitos para aumentar capturas de tela de desenhos animados antigos, por exemplo. Se você não conseguir um bom aumento, use a tag apropriada para seu modelo para denotar a qualidade da resolução, mas às vezes é melhor deixá-las de fora.
-    
--   Anatomia ruim deve ser marcada conforme você vê, ou recortada do quadro, se possível. Imagens com desvios significativos que não podem ser recortadas ou editadas, como o pescoço/cabeça/ombros fora do centro, geralmente são melhores deixadas de fora do conjunto de dados inteiramente.
-    
+-   Esboços geralmente podem ser marcados como "esboço colorido" ou "esboço", o que geralmente é tudo o que você precisa fazer. Se não estiver colorido, "monocromático" e "tons de cinza" geralmente são boas adições também.
+      
+-   Imagens de baixa resolução devem ser ampliadas com um ampliador apropriado, se possível, como um dos muitos feitos para ampliar capturas de tela de desenhos antigos, por exemplo. Se você não conseguir uma boa ampliação, use a tag apropriada para seu modelo para denotar a qualidade da resolução, mas às vezes é melhor deixá-las de fora.
+      
+-   A anatomia ruim deve ser marcada conforme você a vê, ou cortada do quadro se possível. Imagens com desvios significativos que não podem ser cortadas ou editadas, como o pescoço/cabeça/ombros estarem fora do centro, geralmente é melhor deixá-las fora do conjunto de dados completamente.
+      
 
-Depois de marcar todas as suas imagens, certifique-se de salvar tudo e você estará pronto para a próxima etapa.
+Depois de marcar todas as suas imagens, certifique-se de que salvou tudo e estará pronto para a próxima etapa.
 
-## Parte 3.5 | Conjuntos de Dados: Preservação de Prioridade (Regularização)
+## Parte 3.5 | Conjuntos de Dados: Preservação Prévia (Regularização)
 
-Embora completamente opcional, outro método de combater o viés de estilo e a atribuição inadequada de tags é através do uso de um conjunto de dados de preservação de prioridade. Este atuará como um conjunto de dados separado, mas generalizado, para uso junto com seu conjunto de dados de treinamento, e geralmente pode ser usado de forma geral entre várias sessões de treinamento. Eu recomendaria criar uma nova pasta para eles assim: "Pastas de Treinamento/Regularização/RegConceitoA/1\_RegNomeDoConceito".
+Embora completamente opcional, outro método de combater o viés de estilo e a atribuição inadequada de tags é o uso de um conjunto de dados de Preservação Prévia. Isso atuará como um conjunto de dados separado, mas generalizado, para uso junto com seu conjunto de dados de treinamento, e geralmente pode ser usado entre várias sessões de treinamento. Eu recomendaria criar uma nova pasta para eles assim: "Pastas de Treinamento/Regularização/RegConceptA/1_RegConceptName".
 
-"Mas como exatamente eu faço e uso esses?"
+"Mas como exatamente eu faço e uso isso?"
 
-Você pode começar nomeando sua pasta com um token - seu token de classe é frequentemente uma boa escolha.
+Você pode começar nomeando sua pasta com um token -   seu token de classe geralmente é uma boa escolha.
 
-Criar um conjunto de dados para isso é _incrivelmente_ fácil - nenhuma marcação é necessária. Dentro da pasta que você criou para a tag, você simplesmente precisa colocar um número de imagens aleatórias, únicas e variadas que caem dentro do domínio dessa tag. **Não inclua imagens de nada do que você estará treinando.** Com base em meus próprios testes, pessoalmente recomendo um número aproximadamente igual ao número de imagens em seu conjunto de dados principal para treinamento, mas mantenha uma pasta maior com cerca de 50-100 imagens para tirar se você treinar com mais dados no futuro, em vez de expandir seu conjunto de regularização toda vez que tiver mais dados do que antes.
+Criar um conjunto de dados para isso é na verdade _incrivelmente_ fácil -   nenhuma marcação é necessária. Dentro da pasta que você criou para a tag, você simplesmente precisa colocar um número de imagens aleatórias, únicas e variadas que se enquadrem no domínio dessa tag. **Não inclua imagens de nada do que você vai treinar.** A partir dos meus próprios testes, pessoalmente recomendo um número aproximadamente igual ao número de imagens no seu conjunto de dados principal para treinamento, mas mantenha uma pasta maior com ~50-100 imagens para puxar se você treinar com mais dados no futuro, em vez de expandir seu conjunto de regularização toda vez que tiver mais dados do que antes.
 
-Dito isso, seu conjunto de regularização não precisa ser explicitamente variado. Embora a variância seja boa para uso geral, digamos que você tenha muitas capturas de tela no seu conjunto de dados principal, ou muitas imagens do(s) mesmo(s) artista(s) ou artista(s) semelhante(s). Em qualquer caso, o viés estilístico pode ser difícil de remover. Embora marcar os estilos das imagens possa ajudar, nem sempre é _suficiente_ para separar completamente esse estilo. Nesse caso, você pode criar um conjunto de regularização do estilo especificamente: Basta colocar um monte de obras do artista em uma pasta, tirar um monte de capturas de tela, etc., e depois nomear a pasta de regularização com a tag apropriada.
+Dito isso, seu conjunto de dados de regularização não precisa explicitamente ser variado. Embora a variação seja boa para uso geral, digamos que você tenha muitas capturas de tela no seu conjunto de dados principal, ou muitas imagens do mesmo ou similares artistas. Em ambos os casos, o viés estilístico pode ser difícil de remover. Embora marcar os estilos das imagens possa ajudar, nem sempre é _suficiente_ para separar completamente aquele estilo. Nesse caso, você pode criar um conjunto de dados de regularização do estilo especificamente: Basta colocar um monte de obras do artista em uma pasta, tirar um monte de capturas de tela, etc., e então nomear a pasta de regularização com a tag apropriada.
 
-Durante o treinamento, o treinador alternará entre treinar em seu conjunto de dados principal e o conjunto de dados de regularização - isso exigirá que você tenha um treinamento mais longo para alcançar a mesma quantidade de aprendizado, mas reduzirá muito o viés.
+Durante o treinamento, o treinador alternará entre treinar no seu conjunto de dados principal e no conjunto de regularização -   isso exigirá que você tenha um treinamento mais longo para atingir a mesma quantidade de aprendizado, mas reduzirá muito potentemente o viés.
 
-Você também pode usar vários conjuntos de dados de regularização diferentes no mesmo treinamento, basta colocar ambas as pastas no diretório de regularização que você definiu durante o treinamento. Lembre-se de que as repetições das pastas importarão aqui - você sempre pode executar o treinamento novamente com mais repetições da regularização se não for poderoso o suficiente, mas tenha cuidado ao aumentar muito sua contagem de passos.
+Você também pode usar vários conjuntos de dados de regularização diferentes no mesmo treinamento, basta colocar ambas as pastas no diretório de regularização que você configurou durante o treinamento. Lembre-se de que repetições de pastas importarão aqui -   você sempre pode executar o treinamento novamente com mais repetições da regularização se ela não for poderosa o suficiente, mas cuidado para não aumentar demais a contagem de etapas.
 
-Outra coisa a se notar é que você pode influenciar diretamente a força do seu aprendizado de regularização sem apenas adicionar repetições ou mais imagens ao conjunto de dados. Na aba "avançado" das configurações do GUI, a configuração "Peso da perda de prioridade" controla isso. Por padrão, está em 1: Quanto mais próximo esse número estiver de 0, mais forte será o efeito - apenas lembre-se de que você precisará de mais passos de aprendizado para compensar. Se configurado muito alto, você pode arruinar completamente sua execução de treinamento ao aprender muito pouco para ter qualquer efeito.
+Outra coisa a notar é que você pode influenciar diretamente a força do seu aprendizado de regularização sem apenas adicionar repetições ou mais imagens ao conjunto de dados. Na guia "avançado" das configurações da GUI, a configuração "Peso da perda de regularização" controla isso. Por padrão, está em 1: Quanto mais próximo esse número estiver de 0, mais forte será o efeito -   Lembre-se apenas de que você precisará de mais etapas de aprendizado para compensar. Se definido muito alto, você pode arruinar completamente sua execução de treinamento aprendendo muito pouco para ter qualquer efeito.
 
 ## Parte 3.6 | Marcação: Exemplos
 
-Como exemplos geralmente são bastante úteis, colocarei um punhado de exemplos dos meus próprios conjuntos de dados aqui para sua própria referência. **Lembre-se: Eu geralmente treino no fluffyrock e no Pony Diffusion, modelos que usam marcação e6. Outros modelos devem trocar tags para suas próprias variantes, quando necessário. (ex: side view (e6) > from side (booru))**
+Como exemplos geralmente são bastante úteis, vou colocar alguns exemplos dos meus próprios conjuntos de dados aqui para sua referência. **Lembre-se: Costumo treinar em fluffyrock e Pony Diffusion, modelos que usam marcação e6. Outros modelos devem trocar tags para suas próprias variantes, onde necessário. (ex: side view (e6) > from side (booru))**
 
 ![](https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/fefc051a-fd52-4644-ba70-f8cd3308dfc6/width=525/fefc051a-fd52-4644-ba70-f8cd3308dfc6.jpeg)
 
 mizutsune, feral, blue eyes, no sclera, bubbles, soap, side view, action pose, open mouth, realistic, twisted torso, looking back, hand on ground, white background
 
--   White backgrounds eram mais prevalentes neste conjunto de dados, então o fundo foi marcado.
-    
+-   Fundos brancos eram mais prevalentes neste conjunto de dados, então o fundo foi marcado.
+      
 
 ![](https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/4ce8f39e-375d-4e63-8a6a-a22954d3c244/width=525/4ce8f39e-375d-4e63-8a6a-a22954d3c244.jpeg)
 
 arzarmorm, human, male, black hair, brown eyes, dark skin, three-quarter view, full-length portrait, asymmetrical armwear, skirt, pouches, armband, pants
 
--   Nesse caso, o modelo não estava cooperando apenas com o token de instância, então as tags "asymmetrical armwear, skirt, pouches, armband, pants" foram usadas como reforço, o que também as desvinculou do conceito principal, permitindo que fossem controladas individualmente.
-    
--   Este LoRA também tinha muito poucas instâncias de fundos brancos, então deixar sem marcar não foi um problema.
-    
+-   Neste caso, o modelo não estava cooperando apenas com o token de instância, então as tags "asymmetrical armwear, skirt, pouches, armband, pants" foram usadas como reforço, o que também as separou do conceito principal, permitindo que fossem controladas individualmente.
+      
+-   Este LoRA também tinha muito poucas instâncias de fundos brancos, então deixar sem marcação não foi um problema.
+      
 
 ## Parte 4 | Treinamento: Noções Básicas
 
-Agora que você tem seu conjunto de dados, você precisa realmente treiná-lo, o que requer um script de treinamento. O script mais comumente usado, que também uso, são os Scripts Kohya. Eu pessoalmente uso o [Kohya-SS GUI](https://github.com/bmaltais/kohya_ss#windows), um fork do [SD-Scripts](https://github.com/kohya-ss/sd-scripts) treinador de linha de comando. Geralmente está um pouco atras
+Agora que você tem seu conjunto de dados, é hora de realmente treiná-lo, o que requer um script de treinamento. O script mais comumente usado, que eu também utilizo, são os Kohya Scripts. Pessoalmente, uso o [Kohya-SS GUI](https://github.com/bmaltais/kohya_ss#windows), um fork do [SD-Scripts](https://github.com/kohya-ss/sd-scripts) trainer de linha de comando. Geralmente está um pouco desatualizado, mas é perfeitamente utilizável. Ambos são opções válidas, e outras opções existem, mas por questões de compatibilidade vou me manter com o Kohya GUI como referência. A maioria das configurações deve funcionar bem em outros trainers também.
 
-ado nas atualizações, mas é perfeitamente utilizável. Ambos são opções válidas, e outras opções existem, mas para fins de compatibilidade, vou me manter no Kohya GUI como referência. A maioria das configurações deve funcionar decentemente em outros treinadores também.
+Depois de instalá-lo e abri-lo (a instalação é realmente bem fácil), certifique-se de navegar até a guia LoRA no topo (o padrão é dreambooth, um método mais antigo).
 
-Depois de instalá-lo e abri-lo (a instalação é na verdade bastante fácil.), certifique-se de navegar até a guia LoRA no topo (ela padrão para dreambooth, um método mais antigo.)
+Existem muitas coisas que podem ser ajustadas e alteradas no Kohya, então vamos com calma. Presuma que qualquer coisa que eu não mencione aqui pode ser deixada como está.
 
-Há muitas coisas que podem ser ajustadas e alteradas no Kohya, então vamos com calma. Suponha que qualquer coisa que eu não mencione aqui possa ser deixada em branco.
+Texto amarelo como este denota configurações alternativas, semi-experimentais que estou testando. Sinta-se à vontade para dar feedback se usá-las, mas se você está procurando algo estável, ignore-as. Essas configurações mudarão frequentemente conforme eu as testo e treino com elas. Quando eu estiver satisfeito com uma configuração estável que as incorpore, elas serão adotadas nas configurações principais.
 
-Texto amarelo como este denota configurações alternativas, semi-experimentais que estou testando. Sinta-se à vontade para dar feedback se usá-las, mas se você está procurando algo estável, ignore essas. Essas configurações mudarão frequentemente à medida que eu testá-las e treiná-las. Quando eu estiver satisfeito com uma configuração estável incorporando-as, elas serão adotadas nas configurações principais.
+Texto verde denotará configurações para meu setup SDXL. Se você estiver usando SD1.5, ignore estas.
 
-Texto verde denotará configurações para minha configuração SDXL. Se você está usando SD1.5, ignore essas.
-
-Vamos descer verticalmente, aba por aba.
+Vamos percorrer verticalmente, aba por aba.
 
 ```
-Accelerate Launch
+Accelerate Launch 
 ```
 
-Esta aba é onde estão suas configurações de multi-gpu, se você as tiver. Caso contrário, pule esta aba inteiramente, pois os padrões estão perfeitamente bem.
+Esta aba é onde estão suas configurações de multi-GPU, se você as tiver. Caso contrário, pule esta aba completamente, pois os padrões são perfeitamente adequados.
 
 ```
 Model
 ```
 
-Esta aba, como você provavelmente adivinhou, é onde você define seu modelo para treinamento, seleciona seu conjunto de dados, etc.
+Esta aba, como você provavelmente já adivinhou, é onde você define seu modelo para treinamento, seleciona seu conjunto de dados, etc.
 
 -   Nome ou caminho do modelo pré-treinado:
-    
-    -   Insira o caminho completo do arquivo para o modelo que você usará para treinar.
-        
--   Nome do modelo treinado de saída:
-    
-    -   Será o nome do seu arquivo de saída. Nomeie como quiser.
-        
+      
+      -   Insira o caminho completo do arquivo para o modelo que você usará para treinar.
+          
+-   Nome de saída do modelo treinado:
+      
+      -   Será o nome do seu arquivo de saída. Nomeie como quiser.
+          
 -   Pasta de imagens (contendo subpastas de imagens de treinamento):
-    
-    -   Deve ser o caminho completo da pasta de treinamento, mas não a que tem o X\_. Você deve definir o caminho para a pasta onde essa pasta está dentro. Ex: "C:/Pastas de Treinamento/Pasta de Conceito/".
-        
+      
+      -   Deve ser o caminho completo para a pasta de treinamento, mas não a que tem o X_. Você deve definir o caminho para a pasta que essa pasta está dentro. Ex: "C:/Pastas de Treinamento/Pasta de Conceito/".
+          
 -   Abaixo disso, há 3 caixas de seleção:
-    
-    -   v2: Marque se você estiver usando um modelo SD 2.X.
-        
-    -   v\_parameterization: Marque se seu modelo suporta V-Prediction (VPred).
-        
-    -   Modelo SDXL: Marque se você estiver usando algum tipo de SDXL, obviamente.
-        
+      
+      -   v2: Marque se você estiver usando um modelo SD 2.X.
+          
+      -   v_parameterization: Marque se seu modelo suportar V-Prediction (VPred).
+          
+      -   Modelo SDXL: Marque se você estiver usando alguma forma de SDXL, obviamente.
+          
 -   Salvar modelo treinado como:
-    
-    -   Pode permanecer como "safetensors". "ckpt" é um formato mais antigo, menos seguro. A menos que você esteja usando propositalmente uma versão antiga de algo pré-safetensor, ckpt nunca deve ser usado.
-        
+      
+      -   Pode ficar como "safetensors". "ckpt" é um formato mais antigo e menos seguro. A menos que você esteja usando propositalmente uma versão antiga pré-safetensor de algo, ckpt nunca deve ser usado.
+          
 -   Precisão de salvamento:
-    
-    -   "fp16" tem dados de maior precisão, mas internamente tem valores máximos menores. "bf16" mantém dados menos precisos, mas pode usar valores maiores, e parece ser mais rápido para treinar em placas não de consumo (se você tiver uma). Escolha com base nas suas necessidades, mas eu fico com fp16, pois a maior precisão é geralmente melhor para designs mais complexos. "float" salva seu LoRA em formato fp32, o que dá um tamanho de arquivo exagerado. Uso específico.
-        
+      
+      -   "fp16" tem dados de maior precisão, mas internamente tem valores máximos menores. "bf16" mantém dados menos precisos, mas pode usar valores maiores e parece ser mais rápido para treinar em placas não-consumidoras (se você tiver uma). Escolha com base em suas necessidades, mas eu fico com fp16, pois a maior precisão é geralmente melhor para designs mais complexos. "float" salva seu LoRA no formato fp32, o que dá um tamanho de arquivo exagerado. Uso específico.
+          
 
 ```
 Metadata
 ```
 
-Uma seção para informações meta. Isso é totalmente opcional, mas pode ajudar as pessoas a descobrir como usar o LoRA (ou quem o fez) se o encontrarem fora do site. Recomendo colocar seu nome de usuário no slot de autor, pelo menos.
+Uma seção para informações meta. Isso é totalmente opcional, mas pode ajudar as pessoas a descobrir como usar o LoRA (ou quem o fez) se o encontrarem fora do site. Recomendo colocar pelo menos seu nome de usuário no campo de autor.
 
 ```
 Folders
 ```
 
-Tão simples quanto possível: Defina suas pastas de saída/regularização aqui, e o diretório de log se desejar.
+Tão simples quanto pode ser: Defina suas pastas de saída/regularização aqui e o diretório de registro, se quiser.
 
 -   Pasta de saída:
-    
-    -   Onde seus modelos acabarão quando forem salvos durante/depois do treinamento. Defina isso onde quiser.
-        
+      
+      -   Onde seus modelos acabarão quando forem salvos durante/após o treinamento. Defina isso para onde quiser.
+          
 -   Diretório de regularização:
-    
-    -   Deve ser deixado vazio, a menos que você planeje usar um conjunto de dados de preservação de prioridade da seção 3.5, seguindo um caminho semelhante ao da pasta de imagens. Ex: "C:/Pastas de Treinamento/Regularização/RegConceitoA/".
-        
+      
+      -   Deve ser deixado vazio, a menos que você planeje usar um conjunto de dados de Preservação Prévia da seção 3.5, seguindo um caminho semelhante ao da pasta de imagens. Ex: "C:/Pastas de Treinamento/Regularização/RegConceptA/".
+          
 
 ```
 Parameters
 ```
 
-O essencial do treinamento. Quase tudo o que vamos definir está nesta seção: Não se preocupe com os presets, na maioria das vezes.
+O essencial do treinamento. Quase tudo que vamos configurar está nesta seção: Não se preocupe com os presets, na maioria das vezes.
 
--   Tipo de Lora: Padrão (Lora Type: Standard)
-    
-    -   Alt: LyCORIS/LoCon
-        
-    -   LoCons, após uma quantidade decente de treinamentos e testes, parecem sobreajustar mais facilmente do que um LoRA padrão, o que pode causar alguns problemas. Voltei aos LoRAs padrão por enquanto, mas as próximas implementações DoRA merecem uma olhada eventualmente.
-        
--   Preset LyCORIS: Completo (LyCORIS Preset: Full)
-    
--   Tamanho do lote de treino (Train Batch Size):
-    
-    -   Quantas imagens serão treinadas simultaneamente. Isso pode acelerar seu treinamento, mas pode causar resultados menos precisos/mais generalizados, e nem sempre é benéfico. Eu geralmente mantenho isso em 1, mas nunca ultrapasse 4. Isso também aumentará substancialmente seu uso de VRAM.
-        
-    -   Há algumas discussões sobre valores exponenciais serem os melhores para usar (1/2/4/8/16/etc), mas na maioria dos casos você terá dificuldades para ajustar valores maiores na maioria das GPUs de consumo.
-        
-    -   Atualmente, tenho usado um lote de 2.
-        
--   Época (Epoch):
-    
-    -   Uma única época em passos é o número de imagens que você tem, multiplicado pelo número "X\_".
-        
-    -   O que você define esse valor dependerá do seu conjunto de dados, mas como regra geral, começo com um número que tem cada imagem treinada 100 vezes.
-        
-        -   Ex: "1\_Hamburger" tem 30 imagens. A repetição da pasta (1\_) é um valor de 1: Para atingir 900 passos, executaríamos por 30 épocas.
-            
-        -   Ex: "10\_Hamburger" tem 30 imagens. A repetição da pasta (10\_) é um valor de 10: Para o treinador, ele vê isso como _300_ imagens. Para atingir 900 passos, executaríamos por 3 épocas.
-            
-        -   Ambos os métodos treinam a mesma quantidade: Como você faz isso é puramente uma preferência pessoal.
-            
-    -   Para SD 1.5, geralmente treino por 100 épocas (10 com método alternativo.)
-        
-    -   Para SDXL, geralmente treino por 50 épocas (5 com método alternativo.)
-        
-    -   Embora **não perfeito**, esses são bons valores iniciais para testar seu conjunto de dados.
-        
--   Época máxima de treino (Max train epoch):
-    
-    -   Opcional. Força seu treinamento a parar em X épocas, útil em alguns cenários. Substituído pelo próximo valor.
-        
--   Passos máximos de treino (Max train steps):
-    
-    -   Opcional. Força o treinamento a parar na contagem exata de passos fornecida, substituindo épocas. Útil se você quiser parar em 2000 passos exatos ou algo semelhante.
-        
--   Salvar a cada n épocas (Save every n epochs):
-    
-    -   Opcional. Salva um LoRA antes de terminar a cada X número de épocas que você definir. Isso pode ser útil para voltar e ver onde pode estar o ponto ideal.
-        
-    -   Eu geralmente mantenho isso em 1, salvando a cada época. Se a época final estiver sobreajustada, volto para encontrar a melhor versão. Recomendo valores maiores para contagens altas de épocas.
-        
-    -   Sua época final **sempre** será salva, então definir isso para um número ímpar pode ser útil, como salvar a cada 3 épocas com um treinamento de 10 épocas dará a você épocas 3, 6, 9 e 10, dando uma alternativa bem no final se começar a sobreajustar.
-        
--   Cache de latentes _e_ Cache de latentes para disco (Cache latents and Cache latents to disk):
-    
-    -   Esses afetam onde seus dados são carregados durante o treinamento. Se você tem uma placa gráfica recente, "cache de latentes" é a escolha melhor e mais rápida que mantém seus dados carregados na placa enquanto treina. Se você estiver com pouca VRAM, a versão "para disco" é mais lenta, mas não consome sua VRAM para isso.
-        
-    -   Cache para disco, no entanto, evita a necessidade de recarregar os dados se você executá-lo várias vezes, desde que não haja mudanças nele. Útil para ajustar configurações do treinador.
-        
--   Agendador de LR (LR Scheduler):
-    
-    -   Ao usar Prodigy/DAdapt, use apenas Cosine. Ao usar um Adam opt, Cosine With Restarts geralmente é o melhor. Outros agendadores podem funcionar, mas afetam como a IA aprende de maneiras bastante drásticas, então não mexa nisso até entender melhor.
-        
--   Otimizador (Optimizer):
-    
-    -   Existem várias opções para escolher, mas as quatro que valem a pena usar, na minha opinião, são **Prodigy, DAdaptAdam, AdamW e AdamW8bit**.
-        
-    -   Prodigy é o mais novo, mais fácil de usar e produz resultados excepcionais.
-        
-    -   Os otimizadores AdamW são bastante antigos, mas com ajustes finos podem produzir resultados melhores que Prodigy em um tempo
-
- mais rápido.
-        
-    -   Para os propósitos deste guia, usaremos Prodigy e AdamW.
-        
-    -   DAdaptAdam é muito semelhante a Prodigy, e essas configurações devem ser amplamente aplicáveis a ele também. Tem um método de aprendizado menos agressivo, então se você estiver tendo problemas com Prodigy, experimente isso.
-        
--   Argumentos extras do otimizador (Optimizer extra arguments):
-    
-    -   Prodigy/DAdapt: Defina para "decouple=True weight\_decay=0.1 betas=0.9,0.99".
-        
-    -   AdamW: weight\_decay=0.12 betas=0.9,0.99
-        
--   "Taxa de Aprendizado" ("Learning Rate"):
-    
-    -   Ao usar Prodigy/DAdapt, defina isso para 1. Prodigy e DAdapt são adaptativos e definem isso automaticamente enquanto treinam.
-        
-        -   Como uma nota geral, as caixas específicas de "text encoder" e "unet" mais abaixo substituirão a caixa principal, se valores forem definidos nelas.
-            
--   Aquecimento de LR [(]% dos passos totais] (LR warmup []% of total steps]):
-    
-    -   Opcional. 10% é um bom valor na maioria dos cenários.
-        
-    -   SDXL: 20%
-        
--   "Número de ciclos de LR" (LR # cycles):
-    
-    -   Se estiver usando um Adam opt, defina isso para 3. Apenas afeta agendadores específicos.
-        
--   "Resolução máxima" (Max resolution):
-    
-    -   Para a maioria dos modelos, você vai querer isso definido para 768,768.
-        
-    -   Modelos que permitem geração nativa maior (como SDXL, por exemplo) podem usar valores maiores como 1024,1024.
-        
-    -   Você não deve definir isso maior do que seu modelo pode gerar nativamente. Placas menos potentes podem treinar em 512,512, mas terão qualidade reduzida. Alternativamente, muitos modelos baseados no antigo vazamento do NAI (a maioria dos modelos de anime SD1.5), podem ser treinados em 640,640.
-        
-    -   SDXL: Não defina abaixo de 1024.
-        
--   Habilitar buckets: Verdadeiro (Enable buckets: True).
-    
-    -   Isso agrupa imagens de tamanhos semelhantes durante o treinamento. Isso é destinado ao treinamento em lote, mas não faz mal manter ligado.
-        
--   "Resolução máxima do bucket" (Max bucket resolution):
-    
-    -   Deve ser maior que sua resolução de treinamento, pessoalmente uso 960 ao treinar em 768. Qualquer imagem maior que este tamanho será redimensionada e/ou recortada para caber na sua maior largura, tentando preservar sua proporção.
-        
-    -   SDXL: 2048
-        
--   "Taxa de aprendizado do Text Encoder e Unet" (Text Encoder & Unet learning rate):
-    
-    -   SD1.5 AdamW: Tenho isso definido para 0.00005 e 0.0001, respectivamente.
-        
-    -   SDXL: 0.00045 & 0.0004
-        
--   Rank da Rede e Alpha da Rede (Network Rank & Network Alpha):
-    
-    -   Esses afetam o tamanho do seu arquivo e a quantidade de dados que ele pode armazenar. O que você define isso dependerá do seu assunto.
-        
-    -   Se você estiver treinando algo semelhante ao que seu modelo já conhece (como uma garota de anime em um modelo de anime) um Rank/Alpha de 8/8 provavelmente funcionará. Na maioria dos casos, 32/32 é um bom ponto de partida. Embora você possa ir até 128/128, isso é um exagero absoluto que apenas incha seu arquivo e, em alguns casos, pode piorar seus resultados de treinamento. Geralmente, você não deve precisar ir além de 64. Seu Alpha deve ser mantido no mesmo número que seu Rank, na maioria dos casos. **Otimizadores adaptativos como Prodigy e DAdapt devem definir seu alpha para 1.**
-        
-    -   Quando não se usa otimizadores adaptativos, há algumas discussões sobre usar um alpha que na verdade é muito maior do que seu rank, seguindo a equação "(net alpha \* sqrt(net dim))", que deve preservar melhor as taxas de aprendizado. Valores comuns usando isso seriam 64/512, 32/181.02, 16/64 e 8/22.63, como rank/alpha, respectivamente.
-        
-        -   Testar isso mostrou alguns resultados interessantes, mas optei por não usar.
-            
-    -   SDXL: 16/16
-        
--   Rank e Alpha de Convolução (Convolution Rank & Alpha):
-    
-    -   Rank de 16 com um alpha de 1. Ir além de 16 parece dar retornos decrescentes e pode realmente prejudicar as saídas.
-        
--   Normas de peso de escala (Scale weight norms):
-    
-    -   Isso ajuda seu LoRA a funcionar bem com outros LoRAs em conjunto, mas _pode_ ser semi-destrutivo para sua saída.
-        
-    -   Pessoalmente, recomendo usar um conjunto de dados de regularização em vez de usar isso.
-        
-        -   Se você planeja usar seu LoRA com outros LoRAs, defina este valor para 1.
-            
-        -   Se seu LoRA provavelmente será usado apenas sozinho, deixe em 0.
-            
-        -   Dependendo do seu conceito, seus pesos que ficam muito "pesados" são reduzidos, reduzindo seu impacto. Isso permite que vários LoRAs funcionem em conjunto sem lutar por valores, mas em alguns casos PODE afetar negativamente suas saídas finais.
-            
-        -   Definir valores mais altos que 1 reduzirá o impacto, mas também reduzirá a compatibilidade cruzada.
-            
-        -   A escala parece ter um impacto significativamente menor no treinamento de LyCORIS, dado que o aprendizado é espalhado por mais pesos. Pode geralmente ser mantido em 1 sem preocupações.
-            
-        -   Atualmente, optei por manter isso em 0 de agora em diante.
-            
--   Desligamento da Rede (Network Dropout):
-    
-    -   Recomendado, mas opcional. Um valor de 0.1 é um bom valor universal. Ajuda com o sobreajuste na maioria dos cenários.
-        
+-   Tipo de Lora: Padrão
+      
+      -   Alt: LyCORIS/LoCon
+          
+      -   LoCons, após uma quantidade decente de treinamentos e testes, parecem ajustar-se mais facilmente do que um LoRA padrão, então tome cuidado com isso ao usá-los.
+          
+          -   Usado junto com DoRA, não encontrei problemas de ajuste excessivo com LoCons como antes, o que é promissor.
+              
+-   Preset LyCORIS: Completo
+      
+-   Tamanho do Lote de Treinamento:
+      
+      -   Quantas imagens serão treinadas simultaneamente. Isso pode acelerar seu treinamento, mas pode causar resultados menos precisos/mais generalizados e nem sempre é benéfico. Eu geralmente mantenho isso em 1 ou 2, mas nunca vou além de 4. Isso também aumentará substancialmente o uso de vram e ter um tamanho de lote muito grande pode desacelerar você, em vez de acelerar.
+          
+      -   Há algumas discussões sobre valores exponenciais serem os melhores para usar (1/2/4/8/16/etc), mas na maioria dos casos você terá dificuldades para ajustar valores maiores na maioria das GPUs de consumidor.
+          
+      -   Atualmente, estou usando um lote de 2.
+          
+-   Época:
+      
+      -   Uma única época em etapas é o número de imagens que você tem, multiplicado pelo número "X_".
+          
+      -   O que você define como esse valor depende do seu conjunto de dados, mas como regra geral, começo com um número que treina cada imagem 100 vezes.
+          
+          -   Ex: "1_Hamburger" tem 30 imagens. A repetição da pasta (1_) é um valor de 1: Para atingir 900 etapas, rodaríamos por 30 épocas.
+              
+          -   Ex: "10_Hamburger" tem 30 imagens. A repetição da pasta (10_) é um valor de 10: Para o treinador, isso é visto como _300_ imagens. Para atingir 900 etapas, rodaríamos por 3 épocas.
+              
+          -   Ambos os métodos treinam a mesma quantidade: Como você faz isso é puramente preferência pessoal.
+              
+      -   Para SD 1.5, geralmente treino por 100 épocas (10 com método alternativo).
+          
+      -   Para SDXL, geralmente treino por 50 épocas (5 com método alternativo).
+          
+      -   Embora **não seja perfeito**, esses são bons valores iniciais para testar seu conjunto de dados.
+          
+-   Máxima época de treinamento:
+      
+      -   Opcional. Força seu treinamento a parar em X épocas, útil em alguns cenários. Substituído pelo próximo valor.
+          
+-   Máximos passos de treinamento:
+      
+      -   Opcional. Força o treinamento a parar na contagem exata de etapas fornecida, substituindo épocas. Útil se você quiser parar em exatos 2000 passos ou similar.
+          
+-   Salvar a cada n épocas:
+      
+      -   Opcional. Salva um LoRA antes de terminar a cada X número de épocas que você definir. Isso pode ser útil para voltar e ver onde seu ponto ideal pode estar.
+          
+      -   Eu geralmente mantenho isso em 1, salvando a cada época. Se a época final estiver sobrecarregada, volto para encontrar a melhor versão. Recomendo valores maiores para contagens de épocas altas.
+          
+      -   Sua época final será **sempre** salva, então definir isso para um número ímpar pode ser útil, como salvar a cada 3 épocas com um treinamento de 10 épocas lhe dará épocas 3, 6, 9 e 10, dando uma opção de backup no final se começar a exagerar.
+          
+-   Cache latents _e_ Cache latents to disk:
+      
+      -   Estes afetam onde seus dados são carregados durante o treinamento. Se você tiver uma placa de vídeo recente, "cache latents" é a melhor e mais rápida escolha, que mantém seus dados carregados na placa enquanto treina. Se estiver com falta de VRAM, a versão "to disk" é mais lenta, mas não consome sua VRAM para isso.
+          
+      -   Fazer cache para disco (to disk), no entanto, evita a necessidade de recarregar os dados se você rodar várias vezes, desde que não haja alterações neles. Útil para ajustar configurações do treinador.
+          
+-   LR Scheduler:
+      
+      -   Ao usar Prodigy/DAdapt, use apenas Cosine. Ao usar um Adam opt, Cosine With Restarts é geralmente o melhor. Outros agendadores podem funcionar, mas afetam como a IA aprende de maneiras bastante drásticas, então não mexa com eles até entender melhor.
+          
+-   Otimizador:
+      
+      -   Existem várias opções para escolher, mas as quatro que valem a pena usar, na minha opinião, são **Prodigy, DAdaptAdam, AdamW, e AdamW8bit**.
+          
+      -   Prodigy é o mais novo, mais fácil de usar e produz resultados excepcionais.
+          
+      -   Os otimizadores AdamW são bastante antigos, mas com ajustes finos podem produzir resultados melhores que o Prodigy em um tempo mais rápido.
+          
+      -   Para os propósitos deste guia, usaremos Prodigy e AdamW.
+          
+      -   DAdaptAdam é muito semelhante ao Prodigy, e essas configurações devem ser amplamente aplicáveis a ele também. Tem um método de aprendizado menos agressivo, então se você estiver tendo problemas com o Prodigy, experimente este.
+          
+-   Argumentos extras do otimizador:
+      
+      -   Prodigy/DAdapt: Defina para "decouple=True weight_decay=0.1 betas=0.9,0.99".
+          
+      -   AdamW: weight_decay=0.12 betas=0.9,0.99
+          
+-   "Taxa de Aprendizado" [Learning Rate]:
+      
+      -   Ao usar Prodigy/DAdapt, defina isso para 1. Prodigy e DAdapt são adaptativos e ajustam isso automaticamente conforme treinam.
+          
+          -   Como nota geral, as caixas específicas de "text encoder" e "unet" mais abaixo substituirão a caixa principal, se valores forem definidos nelas.
+              
+-   Aquecimento de LR [LR warmup ] (% do total de passos):
+      
+      -   Opcional. 10% é um bom valor na maioria dos cenários. Para conceitos mais simples que um modelo já está ciente (como personagens de anime), 5% parece ser uma escolha decente também.
+          
+      -   SDXL: 20%
+          
+-   "Número de ciclos de LR" [LR # cycles]:
+      
+      -   Se estiver usando um opt Adam, defina isso para 3. Só afeta agendadores específicos.
+          
+-   "Resolução Máxima":
+      
+      -   Para a maioria dos modelos, você vai querer isso definido para 768,768.
+          
+      -   Modelos que permitem geração nativa maior (como SDXL, por exemplo) podem usar valores maiores como 1024,1024.
+          
+      -   Você não deve definir isso para ser maior do que seu modelo pode gerar nativamente. Placas menos poderosas podem treinar em 512,512, mas terão qualidade reduzida. Alternativamente, muitos modelos baseados no antigo vazamento NAI (a maioria dos modelos de anime SD1.5), podem ser treinados em 640,640.
+          
+      -   SDXL: Não defina abaixo de 1024.
+          
+-   Ativar buckets: Verdade.
+      
+      -   Isso agrupa imagens de tamanhos semelhantes durante o treinamento. Isso é destinado ao treinamento em lote, mas não faz mal mantê-lo ativado.
+          
+-   "Resolução máxima do bucket":
+      
+      -   Deve ser maior que sua resolução de treinamento, eu pessoalmente uso 960 quando em resolução de treinamento 768. Qualquer imagem maior que este tamanho será redimensionada e/ou cortada para caber nele em sua maior largura, tentando preservar sua proporção.
+          
+      -   SDXL: 2048
+          
+-   "Taxa de Aprendizado do Text Encoder e Unet" [Text Encoder & Unet learning rate]:
+      
+      -   SD1.5 AdamW: Tenho isso definido para 0.00005 e 0.0001, respectivamente.
+          
+      -   SDXL: 0.0001 e 0.0003
+          
+-   "Parâmetros Específicos do SDXL":
+      
+      -   Esta subcategoria só aparece se você marcou a caixa SDXL antes.
+          
+          -   Cache de saídas do codificador de texto: Pode reduzir o uso de VRAM, mas é incompatível com embaralhamento/eliminação/etc de legendas. Bom para usar se você não estiver usando nada incompatível com isso.
+              
+          -   Sem meia VAE: Deve sempre ser Verdade, na minha opinião, apenas para evitar dores de cabeça.
+              
+-   "LyCORIS":
+      
+      -   Esta subcategoria só aparece se você estiver usando um tipo de lora LyCORIS.
+          
+          -   Decomposição de Peso DoRA: Esta configuração permite usar o novo método de treinamento DoRA. Eu ainda estou testando isso, mas até agora obtive resultados positivos.
+              
+              -   DoRA altera significativamente a forma como um LoRA aprende, treinando-o de maneira semelhante a um finetune completo do que um LoRA padrão -   Isso resulta em tempos de treinamento mais longos, mas maior qualidade e coerência, especialmente com pequenos detalhes.
+                  
+-   Rank da Rede e Alpha da Rede [Network Rank & Network Alpha:]:
+      
+      -   Estes afetam o tamanho do seu arquivo e a quantidade de dados que ele pode armazenar. O que você definir dependerá do seu assunto.
+          
+      -   Se você está treinando algo semelhante ao que seu modelo já conhece (como uma garota de anime em um modelo de anime) um Rank/Alpha de 8/8 provavelmente funcionará. Na maioria dos casos, 32/32 é um bom ponto de partida. Embora você possa ir até 128/128, isso é um exagero absoluto que só aumenta o tamanho do arquivo e em alguns casos pode piorar os resultados do treinamento. Geralmente, você não deve precisar ir além de 64. Seu Alpha deve ser mantido no mesmo número que seu Rank, na maioria dos cenários. **Otimizadores adaptativos como Prodigy e DAdapt devem definir seu alpha para 1.**
+          
+      -   Ao não usar otimizadores adaptativos, há alguma conversa sobre usar um alpha que na verdade é muito maior que seu rank, seguindo a equação "(net alpha * sqrt(net dim))", o que deve preservar melhor as taxas de aprendizado. Valores comuns usando isso seriam 64/512, 32/181.02, 16/64 e 8/22.63, como rank/alpha, respectivamente.
+          
+          -   Testar isso mostrou alguns resultados interessantes, mas optei por não usar.
+              
+      -   SDXL: 16/16
+          
+      -   Usando DoRA, parece que você pode facilmente dividir seus valores pela metade (incluindo valores de Conv), enquanto mantém a qualidade.
+          
+-   Rank e Alpha da Convolução [Convolution Rank & Alpha]:
+      
+      -   Rank de 16 com um alpha de 1. Ir além de 16 parece dar retornos decrescentes, e pode realmente prejudicar os resultados.
+          
+-   Normas de peso da escala [Scale weight norms]:
+      
+      -   Isso ajuda seu LoRA a funcionar bem com outros LoRAs em conjunto, mas _pode_ ser semi-destrutivo para sua saída.
+          
+      -   Pessoalmente, recomendo usar um conjunto de dados de regularização em vez de usar isso.
+          
+          -   Se você planeja usar seu LoRA com outros LoRAs, defina este valor para 1.
+              
+          -   Se seu LoRA provavelmente só será usado sozinho, deixe em 0.
+              
+          -   Dependendo do seu conceito, seus pesos que ficam muito "pesados" são reduzidos, reduzindo seu impacto. Isso permite que vários LoRAs funcionem em conjunto sem competir por valores, mas em alguns casos PODE afetar negativamente seus resultados finais.
+              
+          -   Definir valores superiores a 1 reduzirá o impacto, mas também reduzirá a compatibilidade cruzada.
+              
+          -   A escala parece ter um impacto significativamente menor na formação do LyCORIS, dado que o aprendizado é distribuído em mais pesos. Pode geralmente ser mantido em 1 sem preocupações.
+              
+          -   Atualmente, optei por manter isso em 0 a partir de agora.
+              
+-   Dropout da Rede:
+      
+      -   Recomendado, mas opcional. Um valor de 0,1 é um bom valor universal. Ajuda a evitar o ajuste excessivo na maioria dos cenários.
+          
 
 ```
 Advanced (Subtab)
 ```
 
-Não tocaremos muito aqui, pois a maioria dos valores tem propósitos específicos.
+Não vamos mexer muito aqui, pois a maioria dos valores tem propósitos específicos.
 
--   Peso da perda de prioridade (Prior loss weight):
-    
-    -   Especificamente para conjuntos de dados de regularização, 1 é um bom valor.
-        
--   Parâmetros adicionais (Additional parameters):
-    
-    -   Se seu modelo suporta zSNR, use "--zero\_terminal\_snr".
-        
--   Manter n tokens (Keep n tokens):
-    
-    -   Para uso com embaralhamento de legendas, para evitar que os primeiros X tokens sejam embaralhados, **incluindo as vírgulas usadas para separá-los**. Geralmente mantenho isso definido para 4 ou 6, para manter os primeiros 2-3 tokens de serem embaralhados.
-        
--   Pular clipe (Clip skip):
-    
-    -   Deve ser definido para o valor de pulo de clipe do seu modelo. A maioria dos modelos de anime e SDXL usa 2, a maioria dos outros usa 1. Se você não tiver certeza, a maioria dos modelos civit observa o valor usado em sua página.
-        
--   Verificação de ponto de gradiente (Gradient Checkpointing):
-    
-    -   Marque para economizar VRAM a um pequeno custo de velocidade. Não tem efeito na qualidade de saída.
-        
--   Embaralhar legenda (Shuffle Caption):
-    
-    -   Opcional. Se verdadeiro, isso embaralhará as tags (fora dos primeiros X mantidos no lugar por "manter n tokens") toda vez que a imagem for treinada, o que ajuda com flexibilidade geral.
-        
-    -   Alguns consideram isso inútil ou uma "desculpa", mas sua utilidade varia com seu conjunto de dados. Também adiciona randomização ao seu treinamento, e com isso ligado, executar o mesmo treinamento duas vezes pode dar a você dois LoRAs ligeiramente diferentes no final.
-        
--   Carregador de dados persistente (Persistent Data Loader):
-    
-    -   Opcional. Esta opção mantém suas imagens carregadas entre épocas. **Isso consome MUITA VRAM**, mas acelerará o treinamento. Se você puder _se dar ao luxo_ de usar, use.
-        
+-   Peso da perda prévia [Prior loss weight]:
+      
+      -   Especificamente para conjuntos de dados de regularização, 1 é um bom valor.
+          
+-   Parâmetros adicionais:
+      
+      -   Se seu modelo suportar zSNR, use "--zero_terminal_snr".
+          
+-   Manter n tokens:
+      
+      -   Para uso com embaralhamento de legendas, para evitar que os primeiros X tokens sejam embaralhados, **incluindo as vírgulas usadas para separá-los**. Geralmente mantenho isso definido para 4 ou 6, para manter os primeiros 2-3 tokens sem serem embaralhados.
+          
+-   Pular camada clip [Clip skip]:
+      
+      -   Deve ser definido para o valor de pular clipe do seu modelo. A maioria dos modelos de anime e SDXL usa 2, a maioria dos outros usa 1. Se você não tiver certeza, a maioria dos modelos do civit nota o valor usado em sua página.
+          
+-   Checkpointing de Gradiente:
+      
+      -   Marque para salvar VRAM com um leve custo de velocidade. Não tem efeito na qualidade de saída.
+          
+-   Embaralhamento de legenda [Shuffle Caption]:
+      
+      -   Opcional. Se verdadeiro, isso embaralha as tags (fora dos primeiros X mantidos no lugar por "manter n tokens") toda vez que a imagem é treinada, o que ajuda com a flexibilidade geral.
+          
+      -   Alguns consideram isso inútil ou um "cope", mas sua utilidade varia com seu conjunto de dados. Também adiciona randomização ao seu treinamento, e com isso ativado, rodar o mesmo treinamento duas vezes pode dar dois LoRAs ligeiramente diferentes no final.
+          
+-   Carregador de Dados Persistente [Persistent Data Loader]:
+      
+      -   Opcional. Esta opção mantém suas imagens carregadas entre as épocas. **Isso consome MUITA VRAM**, mas acelerará o treinamento. Se você pode _se dar ao luxo_ de usá-lo, use-o.
+          
 -   CrossAttention:
-    
-    -   Sempre xformers.
-        
--   Aumento de cor (Color augmentation):
-    
-    -   **_Não faça._**
-        
--   Aumento de espelhamento (Flip Augmentation):
-    
-    -   Opcional. Isso permite que você basicamente dobre seu conjunto de dados espelhando aleatoriamente suas imagens horizontalmente durante o treinamento. Isso pode ser especialmente útil se você tiver poucas imagens, mas **NÃO** use isso se tiver detalhes assimétricos que deseja preservar.
-        
--   Min SNR Gamma:
-    
-    -   5 é um valor conhecido como bom. Acelera o treinamento ligeiramente.
-        
--   Perda de estimativa não enviesada (Debiased Estimation Loss):
-    
-    -   Verdadeiro. Ajuda com a desvio de cor e supostamente faz com que o treinamento precise de menos passos.
-        
--   Tipo de deslocamento de ruído (Noise offset type):
-    
-    -   Original
-        
--   Deslocamento de ruído (Noise offset):
-    
-    -   0
-        
+      
+      -   xformers, sempre.
+          
+-   Aumentação de cor [Color augmentation]:
+      
+      -   **_Não._**
+          
+-   Aumentação de inversão [Flip Augmentation]:
+      
+      -   Opcional. Isso permite que você essencialmente dobre seu conjunto de dados espelhando aleatoriamente suas imagens horizontalmente durante o treinamento. Isso pode ser especialmente útil se você tiver poucas imagens, mas **NÃO** use isso se tiver detalhes assimétricos que deseja preservar.
+          
+-   Mínimo SNR Gamma:
+      
+      -   5 é um valor conhecido como bom. Acelera ligeiramente o treinamento.
+          
+-   Perda de Estimativa Desviada [Debiased Estimation Loss]:
+      
+      -   Verdade. Ajuda com desvio de cor e supostamente faz o treinamento precisar de menos etapas.
+          
+-   Tipo de offset de ruído [Noise offset type]:
+      
+      -   Original
+          
+-   Offset de ruído [Noise offset]:
+      
+      -   0
+          
 
-E isso é tudo! Role para o topo, abra o menu suspenso "configuração" e salve suas configurações com o nome que preferir. Uma vez feito isso, clique em "iniciar treinamento" na parte inferior e aguarde! Dependendo da sua placa, configurações e quantidade de imagens, isso pode levar um bom tempo.
+E isso é tudo! Role para cima, abra o menu suspenso "configuração" e salve suas configurações com o nome que quiser. Depois de fazer isso, clique em "iniciar treinamento" na parte inferior e espere! Dependendo da sua placa, configurações e contagem de imagens, isso pode levar um bom tempo.
 
 ## Parte 5 | Perguntas e Respostas
 
-Esta seção é reservada para dicas, truques e outras coisas úteis que não se encaixam em outras partes. Tentarei atualizá-la periodicamente.
+Esta seção é reservada para dicas, truques e outras coisas que acho útil saber, mas que não se encaixam em outro lugar. Tentarei atualizar isso periodicamente.
 
-**P:** Vejo em muitos guias que recomendam treinar por 2000 etapas ou algo assim, mas você usa épocas. Por quê?
+**P:** Vejo em muitos guias a recomendação de treinar por 2000 passos ou algo parecido, mas você fala em épocas. Por quê?
 
-**R:** Devido à inconsistência no tamanho e qualidade dos conjuntos de dados, as etapas acabam sendo uma medida completamente arbitrária. As épocas, pelo menos, contam repetições completas das pastas e servem como uma melhor forma de medir a quantidade de treinamento feita em seus dados. Muitos desses guias também estão treinando conceitos muito fáceis, que o treinamento capta mais rapidamente. Não se preocupe se ultrapassar massivamente essa contagem de etapas, mas 2000 ainda é um bom número para se almejar.
+**R:** Devido à inconsistência no tamanho e na qualidade dos conjuntos de dados, os passos acabam sendo uma medida completamente arbitrária. Épocas, pelo menos, contam repetições completas das pastas, sendo uma melhor forma de medir a quantidade de treinamento feito nos seus dados. Muitos desses guias também estão treinando conceitos muito fáceis, que o treinamento capta mais rápido do que outros. Não se preocupe se ultrapassar bastante essa contagem de passos, mas 2000 ainda é um bom número para se almejar.
 
-**P:** Vejo outros guias dizendo para definir o Network Alpha para metade do Rank, por que você não faz isso?
+**P:** Vejo outros guias dizendo para definir o Network Alpha como metade do Rank, por que você não faz isso?
 
-**R:** Isso é um mal-entendido bastante antigo que ainda é muito disseminado. O Alpha funciona como uma forma de alterar suas taxas de aprendizado: sendo metade do Rank, é metade da taxa de aprendizado. Não faz mal ter em metade ou até mais baixo, mas você provavelmente precisará de um treinamento mais longo.
+**R:** Essa é uma concepção bastante antiga que ainda é muito disseminada. O Alpha funciona como um meio de alterar suas taxas de aprendizado: ser metade do Rank é metade da taxa de aprendizado. Não há problema em ter isso na metade ou até menor, mas provavelmente você precisará de um treinamento mais longo.
 
 **P:** Meu script de treinamento está mostrando um valor de perda que continua mudando conforme o treinamento avança, o que é isso?
 
-**R:** Na maioria dos casos, você não precisa se preocupar com a perda, nem deve se preocupar com valores ou intervalos específicos. A única vez que deve prestar atenção é se você vê-lo em torno de um certo intervalo na maior parte do treinamento, apenas para fazer uma mudança massiva mais tarde. Isso é um sinal de que algo pode ter dado errado ou que começou a treinar demais.
+**R:** Na maioria dos casos, você não precisa se preocupar com a perda, nem deve se preocupar com valores ou intervalos específicos. A única vez que você deve prestar atenção é se vê-lo em um certo intervalo durante a maior parte do treinamento, apenas para ver uma mudança maciça mais tarde. Isso é um sinal de que algo pode ter dado errado ou começou a sobrecarregar.
 
-**P:** Como posso saber se meu LoRA está sub/treinado demais?
+**P:** Como posso saber se meu LoRA está sub/sobrecarregado?
 
-**R:** Ambos devem ser bastante óbvios, mesmo para o olho destreinado. Se estiver subtreinado, você provavelmente verá detalhes "borrados" ou incompletos, ou uma adesão muito baixa aos detalhes. Se estiver sobrecarregado, você pode ter cores estranhas e supersaturadas, viés de estilo, viés de pose, etc. Isso variará dependendo do seu conjunto de dados, então fique atento.
+**R:** Ambos devem ser bastante óbvios, mesmo para olhos não treinados. Se estiver subcarregado, você provavelmente verá detalhes "borrados" ou incompletos, ou uma adesão muito baixa aos detalhes. Se estiver sobrecarregado, você pode ter cores estranhas, super saturadas, viés de estilo, viés de pose, etc. Isso varia dependendo do seu conjunto de dados, então fique atento.
 
-**P:** Você mencionou brevemente fp16 e bf16, mas quais são as versões "completas" que estou vendo?
+**P:** Você mencionou brevemente fp16 e bf16, mas o que são as versões "completas" que estou vendo?
 
-**R:** O fp/bf16 "padrão" usa precisão mista, enquanto as versões "completas" não. É enganoso, mas as versões completas mantêm dados menos precisos, mas podem ser incrivelmente rápidas para treinar. Tenho certeza de que têm seus usos, mas na maioria dos casos você está perfeitamente bem ficando com precisão mista.
+**R:** O fp/bf16 "padrão" usa precisão mista, enquanto as versões "completas" não usam. É enganoso, mas as versões completas mantêm dados menos precisos, mas podem ser incrivelmente rápidas para treinar. Tenho certeza de que elas têm seus usos, mas na maioria dos casos, você está perfeitamente bem usando precisão mista.
 
-**P:** Continuo vendo menções de "Vpred", o que exatamente é isso?
+**P:** Continuo vendo menções a "Vpred", o que exatamente é isso?
 
-**R:** Vpred, ou V-Prediction, ou V-Parameterization, são todas a mesma coisa. Embora eu não entenda completamente em nível técnico, pelo que sei, é uma otimização para os agendadores de ruído que "predizem" resultados durante a geração de imagens, permitindo que um resultado final seja gerado em menos etapas.
+**R:** Vpred, ou V-Prediction, ou V-Parameterization, são todas a mesma coisa. Embora eu não entenda totalmente em um nível técnico, pelo que sei, é uma otimização para os agendadores de ruído que "prevê" resultados durante a geração de imagens, permitindo que um resultado final seja gerado em menos etapas.
 
-**P:** O que é Min SNR? zSNR? Zero Terminal SNR? Eles são iguais ou diferentes?
+**P:** O que é Min SNR? zSNR? Zero Terminal SNR? São a mesma coisa ou diferentes?
 
-**R:** Não, embora semelhantes, fazem coisas bastante diferentes. Para simplificar, o zSNR (Zero Terminal SNR) é uma técnica que permite que a IA gere usando um espaço de cores mais amplo, incluindo pretos perfeitos. Pense nisso como a diferença entre um monitor normal e um monitor HDR OLED. Min SNR é um método de convergência acelerada de treinamento, que permite que modelos sejam treinados em menos etapas.
+**R:** Não, embora sejam semelhantes, fazem coisas bastante diferentes. Para simplificar, zSNR (Zero Terminal SNR) é uma técnica que permite que a IA gere usando um espaço de cores mais amplo, incluindo pretos perfeitos. Pense nisso como a diferença entre um monitor normal e um monitor OLED HDR. Min SNR é um método de convergência de treinamento acelerada, que permite que modelos sejam treinados em menos etapas.
 
-**P:** Posso treinar em uma resolução maior do que o meu modelo de treinamento pode fazer?
+**P:** Posso treinar em uma resolução mais alta do que meu modelo de treinamento pode fazer?
 
-**R:** Pode? Sim. Deve? Não. Normalmente, resoluções mais altas são uma troca de qualidade por velocidade, neste caso você estaria trocando velocidade por piores resultados. Sem entrar em detalhes técnicos, treinar em uma resolução maior do que o seu modelo pode lidar não é bom para seus resultados.
+**R:** Você pode? Sim. Você deve? Não. Enquanto normalmente resoluções mais altas são uma troca de qualidade por velocidade, neste caso, você estaria trocando velocidade por piores resultados. Sem entrar em detalhes técnicos, treinar maior do que seu modelo pode suportar não é bom para seus resultados.
 
-**P:** Você mencionou não "sobrecarregar" suas imagens com tags (overtag), mas quantas são muitas?
+**P:** Você mencionou não "exagerar nas tags" nas suas imagens, mas quantas são muitas?
 
-**R:** Isso realmente dependerá do seu conjunto de dados e configurações de treinamento. Treinamentos mais longos podem ajudar com o excesso de tags, mas correm um risco maior de sobrecarregar. Geralmente, tente manter seu total por imagem em 20 ou menos em média, mas ter exceções com mais não é o pior. Tente evitar tags que não sejam importantes para a imagem (a menos que você ache que os resultados estão se apegando demais a algo, nesse caso marque), e tags que seu modelo tenha pouco ou nenhum conhecimento. Tags vazias são vistas como alvos de treinamento e tentarão ser preenchidas. Se preenchidas com dados errados, você pode acabar com tags aparentemente aleatórias sendo necessárias para obter o resultado pretendido.
+**R:** Isso realmente depende do seu conjunto de dados e das configurações de treinamento. Treinamentos mais longos podem ajudar com o excesso de tags, mas aumentam o risco de sobrecarregar. Geralmente, tente manter o total por imagem em 20 ou menos, em média, mas ter exceções com mais não é o pior. Tente evitar tags que não são importantes para a imagem (a menos que você esteja descobrindo que os resultados estão se apegando a algo demais, nesse caso, tague), e tags que seu modelo tem pouco ou nenhum conhecimento. Tags vazias são vistas como alvos de treinamento e tentarão ser preenchidas. Se preenchidas com os dados errados, você pode acabar precisando de tags aparentemente aleatórias para obter o resultado desejado.
 
-**P:** Qual é a diferença entre um LoRA e um LyCORIS? Eles são diferentes?
+**P:** Qual a diferença entre um LoRA e um LyCORIS? Eles são diferentes?
 
-**R:** Todo LyCORIS é um LoRA, mas nem todo LoRA é um LyCORIS. LyCORIS se refere especificamente a um subconjunto de métodos mais novos de treinamento de LoRA (LoCon, LoHa, LoKR, DyLoRA, etc.). Todos esses ainda são LoRAs, mas suas novas metodologias os tornam estruturalmente diferentes o suficiente para terem sua própria designação. Agora que a maioria das interfaces gráficas tem suporte embutido para eles, para um usuário final eles funcionam de maneira funcionalmente igual. LoRA por si só se refere ao método original.
+**R:** Todo LyCORIS é um LoRA, mas nem todo LoRA é um LyCORIS. LyCORIS refere-se especificamente a um subconjunto de novos métodos de treinamento LoRA (LoCon, LoHa, LoKR, DyLoRA, etc.). Todos esses ainda são LoRAs, mas suas novas metodologias os tornam estruturalmente diferentes o suficiente para terem sua própria designação. Agora que a maioria das GUIs tem suporte embutido para eles, para um usuário final, eles funcionam de maneira funcionalmente idêntica. LoRA por si só se refere apenas ao método original.
 
-**P:** Meu LoRA meio que funciona, mas às vezes apresenta uma anatomia muito estranha e distorcida. O que aconteceu?
+**P:** Meu LoRA meio que funciona, mas às vezes tem uma anatomia muito estranha e distorcida. O que aconteceu?
 
-**R:** Na maioria das vezes, a anatomia distorcida se origina do seu conjunto de dados. Revise-o em busca de imagens que sejam semelhantes às distorções que você está vendo. Poses incomuns, ângulos de câmera estranhos, imagens de duplas/grupos incorretamente marcadas e outras exceções podem ser causas prováveis. Tente marcar o que for aplicável, mas geralmente é melhor remover a imagem completamente ou recortar as partes que estão causando problemas, se possível.
+**R:** Na maioria das vezes, a anatomia distorcida origina-se do seu conjunto de dados. Verifique se há imagens que são semelhantes às distorções que você está vendo. Poses incomuns, ângulos de câmera estranhos, imagens de duplas/grupos mal tagueadas e outros outliers podem ser causas prováveis. Tente taguear o que for aplicável, mas geralmente é melhor remover a imagem completamente ou cortar as partes que estão causando problemas, se possível.
 
-**P:** Ouvi um pouco sobre treinamento com uma única tag (single-tag training), o que é isso?
+**P:** Ouvi um pouco sobre treinamento de tag única, o que é isso?
 
-**R:** Treinar com uma única tag é um método muito antigo comumente usado por iniciantes que não querem perder tempo marcando. Ao treinar com uma única tag, a IA "homogeneizará" **_tudo_** que aprende de uma imagem na tag, resultando em resultados altamente generalizados. Isso só começará a funcionar se cada imagem for de um assunto específico (como um personagem), e tem uma alta probabilidade de se fixar em fundos, poses e outras variáveis indesejadas. Se usado com qualquer outra coisa que não seja repetitiva, você acabará com algo que é efetivamente uma bagunça digital. Não recomendaria isso para nenhuma aplicação.
+**R:** Treinar com uma única tag é um método muito antigo, comumente usado por iniciantes que não querem gastar tempo tagueando. Ao treinar para uma única tag, a IA "homogeneiza" **_tudo_** que aprende de uma imagem na tag, resultando em resultados altamente generalizados. Isso só começará a funcionar se cada imagem for de um sujeito específico (como um personagem) e tem uma alta probabilidade de se apegar a fundos específicos, poses e outras variáveis indesejadas. Se usado com qualquer outra coisa que não seja repetitiva, você acabará com o que é efetivamente uma bagunça digital. Eu não recomendaria isso para nenhuma aplicação.
 
-**P:** Já vi outras pessoas dizendo para marcar suas imagens de uma forma diferente da que você faz, sem ter tags para descrever o assunto fora do seu token principal. Isso é melhor? Pior?
+**P:** Vi outras pessoas dizendo para taguear suas imagens de uma maneira diferente da sua, sem tags para descrever o sujeito fora de seu token principal. Isso é melhor? Pior?
 
-**R:** Nenhum! É apenas um método diferente de marcação: no entanto, é muito menos flexível. Se você pegar um personagem, marcar o personagem apenas como o personagem pode dificultar a mudança da cor dos olhos, roupa ou outros detalhes. Se você não se importa com isso, é perfeitamente válido! Alternativamente, meu método é muito mais flexível, mas obter a semelhança exata do personagem exigirá várias tags.
+**R:** Nem melhor, nem pior! É apenas um método diferente de taguear: no entanto, é muito menos flexível. Se você pegar um personagem, por exemplo, taguear o personagem apenas como o personagem pode dificultar a alteração da cor dos olhos, roupa ou outros detalhes. Se você não se importa com isso, é perfeitamente válido! Alternativamente, meu método é muito mais flexível, mas conseguir a semelhança exata do personagem exigirá várias tags.
 
-## Parte 6 | Treinamento Avançado: Multi-Conceito LoRA
+## Parte 6 | Treinamento Avançado: LoRA de Múltiplos Conceitos
 
-Então, você já se familiarizou e quer mais um desafio? Ou talvez você tenha um personagem com muitos trajes? Armaduras específicas de gênero? É aí que entra o treinamento de multi-conceito.
+Então você já se familiarizou e quer um desafio maior? Ou talvez tenha um personagem com muitos trajes? Armaduras específicas de gênero? É aqui que entra o treinamento de múltiplos conceitos.
 
-As configurações reais de treinamento para estes são quase exatamente as mesmas em comparação com os LoRAs normais, com algumas ressalvas:
+As configurações de treinamento para estes são quase exatamente as mesmas em comparação com os LoRAs normais, com algumas ressalvas:
 
--   Não use um tamanho de lote maior que 1. Se imagens de vários conceitos forem carregadas, elas se generalizarão em uma bagunça, ou você terá uma sobrepondo a outra.
-    
-    -   Possivelmente não é mais o caso, mas não tenho certeza no momento.
-        
--   Tenha cuidado ao usar aumento de flip (flip augmentation), pois ele será aplicado a todas as imagens, não apenas a um conceito.
-    
--   Dependendo de quantos conceitos você está treinando e quão complexos eles são, você pode querer aumentar seus valores de Rank e Alpha. Recomendo tentar 32 primeiro e ver como ele se comporta.
-    
+-   Não use um tamanho de lote maior que 1. Se imagens de múltiplos conceitos forem carregadas, elas se generalizarão em uma bagunça, ou uma dominará a outra.
+      
+      -   Possivelmente não é mais o caso, mas incerto neste momento.
+          
+-   Tenha cuidado ao usar aumentação de inversão, pois ela se aplicará a todas as imagens, não apenas a um conceito.
+      
+-   Dependendo de quantos conceitos você está treinando e quão complexos eles são, você pode querer aumentar seus valores de Rank e Alpha. Recomendo tentar 32 primeiro e ver como funciona.
+      
 
-Agora, reúna suas imagens da mesma maneira que detalhei antes, mas separe-as com base em seus conceitos (trajes, armaduras, etc). Qualquer edição também deve ser feita como antes.
+Agora, reúna suas imagens da mesma forma que detalhei antes, mas separe-as com base em seus conceitos (trajes, armaduras, etc). Qualquer edição também deve ser feita como antes.
 
-Depois de preparar completamente seus dados, descubra qual conceito tem mais dados e, em sua pasta de conceito, crie uma pasta 1\_nomeDoConceito para ele.
+Depois de preparar totalmente seus dados, descubra qual conceito tem mais dados e, em sua pasta de conceito, crie uma pasta 1_nome_do_conceito para ele.
 
-Agora, faça o mesmo com seus outros conceitos, obviamente substituindo "nomeDoConceito"
+Agora, faça o mesmo com seus outros conceitos, obviamente substituindo "nome_do_conceito" pelo token de instância deles.
 
- pelo token de instância deles.
+Depois de ter suas pastas nomeadas e preenchidas, faça o seguinte:
 
-Depois de nomear e preencher suas pastas, faça o seguinte:
-
--   Pegue o número de imagens na sua maior pasta, depois multiplique pelo "X\_" para obter sua contagem total de etapas. (imagens\*repetições da pasta) = etapas
-    
-    -   Por exemplo, a Pasta A tem 51 imagens, a Pasta B tem 43 imagens. A Pasta A seria usada. Supondo 10 repetições de pasta, isso nos dá 510 etapas para a Pasta A. (51\*10)
-        
--   Agora, divida a contagem de etapas pelo número de imagens na sua segunda maior pasta. O número resultante, arredondado para o mais próximo inteiro, é o número que o "X\_" dessa pasta deve ser alterado.
-    
-    -   Então, a Pasta B tem 43 imagens. (510/43) = 11.86, que arredondamos para 12. Agora temos 10\_PastaA e 12\_PastaB.
-        
+-   Pegue o número de imagens em sua maior pasta, então multiplique pelo "X_" para obter sua contagem total de passos. (imagens*repetições de pasta) = passos
+      
+      -   Por exemplo, a Pasta A tem 51 imagens, a Pasta B tem 43 imagens. A Pasta A seria usada. Supondo 10 repetições de pasta, isso nos dá 510 passos para a Pasta A. (51*10)
+          
+-   Agora, divida a contagem de passos pelo número de imagens em sua segunda maior pasta. O número resultante, arredondado para o mais próximo inteiro, é o número que o "X_" dessa pasta deve ser alterado.
+      
+      -   Então, a Pasta B tem 43 imagens. (510/43) = 11.86, que arredondamos para 12. Agora temos 10_PastaA e 12_PastaB.
+          
 -   Repita isso para cada pasta aplicável.
-    
-    -   A Pasta C tem 32 imagens, então comparamos com a Pasta A como antes. (510/32) = 15.93, que arredondamos para 16.
-        
--   Em nosso exemplo, agora temos três pastas equilibradas juntas. Estas poderiam ser deixadas como estão ou, como todas são divisíveis por dois, você pode reduzir cada X\_ pela metade para obter 6\_, 8\_ e 5\_ respectivamente. Lembre-se de que você estará multiplicando esses valores pelas suas épocas!
-    
+      
+      -   A Pasta C tem 32 imagens, então comparamos com a Pasta A, como antes. (510/32) = 15.93, que arredondamos para 16.
+          
+-   Em nosso exemplo, agora temos três pastas balanceadas juntas. Elas poderiam ser deixadas como estão ou, como todas são divisíveis por dois, você pode reduzir cada X_ pela metade para obter 6_, 8_ e 5_ respectivamente. Lembre-se de que você multiplicará isso por suas épocas!
+      
 
 Por que fazer isso, você pergunta?
 
-Fazemos isso para equilibrar o conjunto de dados. Se você mantiver tudo igual, a pasta com mais imagens dominará o treinamento, deixando os outros conceitos com uma fração. Equilibramos o conjunto de dados para garantir que cada conceito receba tempo de treinamento igual, o que evita que um domine e os outros conceitos subtreinem.
+Fazemos isso para balancear o conjunto de dados. Se você mantiver tudo igual, a pasta com mais imagens dominará o treinamento, deixando os outros conceitos com uma fração. Balanceamos o conjunto de dados para garantir que cada conceito receba tempo de treinamento igual, o que impede que um domine e os outros conceitos sejam subcarregados.
 
-Você deve ter em mente, no entanto, que se tiver muito poucas imagens em uma pasta de conceito, esse conceito individual pode supertreinar, mesmo que o resto do LoRA esteja bem. Isso é um problema maior quanto maior for a discrepância entre ele e a maior pasta.
+Você deve ter em mente, no entanto, que se tiver muito poucas imagens em uma pasta de conceito, esse conceito individual pode ser supertreinado, mesmo que o resto do LoRA esteja bem. Esse é um problema maior quanto maior for a discrepância entre ela e a maior pasta.
 
-Agora que suas pastas estão equilibradas, devemos observar como você as nomeia e qual será a sua tag de ativação para cada uma.
+Agora que suas pastas estão balanceadas, devemos olhar como nomeá-las e qual será sua tag de ativação para cada uma.
 
-Se você estiver treinando um personagem com vários trajes, nomeie suas pastas como "1\_charactertag, outfittag". Suas duas primeiras tags devem ser essas, nessa ordem.
+Se você estiver treinando um personagem com vários trajes, nomeie suas pastas como "1_tag_do_personagem, tag_do_traje". Suas duas primeiras tags devem ser essas, nessa ordem.
 
-Se você estiver treinando algo não relacionado a um personagem, como uma armadura de gênero, geralmente crio uma tag para cada versão. Por exemplo, "armortagm" e "armortagf" para homens e mulheres respectivamente. Como antes, essas devem ser a primeira tag em suas respectivas imagens.
+Se você estiver treinando algo não ligado a um personagem, como armadura de gênero, geralmente crio uma tag para cada versão. Por exemplo, "tagarmaduram" e "tagarmaduraf" para homens e mulheres, respectivamente. Assim como antes, essas devem ser a primeira tag em suas respectivas imagens.
 
-Agora que seus nomes e tags de ativação estão definidos, você pode começar a marcar! Isso pode ser feito como um lora normal, você só tem muito mais imagens para percorrer.
+Agora que seus nomes e tags de ativação estão definidos, você pode começar a taguear! Isso pode ser feito como um lora normal, você só tem um monte de imagens para passar.
 
-E é isso! depois de marcar, você pode treiná-lo como antes. Provavelmente terá tempos de treinamento muito mais longos, devido ao aumento de imagens, mas no final terá vários conceitos em um único LoRA para usar como desejar.
+E é isso! Uma vez tagueado, você pode treiná-lo como antes. Você provavelmente terá tempos de treinamento muito mais longos, dada a quantidade aumentada de imagens, mas no final você terá múltiplos conceitos em um único LoRA para usar como quiser.
 
 ## Parte 7 | Treinamento Avançado: LyCORIS e Seus Muitos Métodos
 
-LyCORIS fica mais avançado a cada dia e, à medida que aumenta em popularidade, sinto que é melhor ter uma seção falando sobre isso. Esta será um pouco mais técnica do que o resto, mas tentarei manter apenas o essencial.
+LyCORIS fica mais avançado a cada dia e, à medida que se torna mais comum, acho melhor ter uma seção falando sobre isso. Isso será um pouco mais técnico do que o resto, mas tentarei manter no "precisa saber".
 
 **Tipos de LyCORIS:**
 
 -   **LoCON:** Um LoRA que também afeta as camadas de convolução do modelo base, permitindo saídas mais dinâmicas.
-    
--   **LoHa & LoKR:** Um LoRA que essencialmente é duas versões diferentes de si mesmo, que são combinadas/média pelo Produto de Hadamard e Produto de Kronecker respectivamente. Demoram mais para treinar e são mais orientados para o treinamento generalizado.
-    
--   **DyLoRA:** Abreviação de LoRA Dinâmico, esta é uma implementação de LoRA que permite que o Rank mude dinamicamente, mas de outra forma é um LoRA normal.
-    
--   **GLoRA:** Abreviação de LoRA Generalizado, esta é uma implementação feita para generalizar conjuntos de dados diversos de maneira flexível e capaz.
-    
--   **iA3:** Em vez de afetar o rank como a maioria dos LoRA, o iA3 afeta os vetores aprendidos, resultando em um método de treinamento muito eficiente. Semelhante (aparentemente um pouco melhor?) a um LoRA normal, em um pacote muito menor.
-    
--   **Diag-OFT:** Esta implementação "preserva a energia hiperesférica ao treinar transformações ortogonais que se aplicam às saídas de cada camada". Em resumo, esse tipo é melhor para preservar a compreensão original do modelo base sobre itens coincidentes ao treinamento (como fundos e poses). Isso também aparentemente converge (treina) mais rápido que um LoRA padrão.
-    
--   **Fine-Tuning Nativo:** Também conhecido como dreambooth, que não estamos focando e ignoraremos neste guia. A implementação de LyCORIS permite que seja usado como um LoRA, mas produz arquivos **muito** grandes.
-    
+
+-   **LoHa & LoKR:** Um LoRA que essencialmente é duas versões diferentes de si mesmo, que são combinadas/médias pelo Produto de Hadamard e Produto de Kronecker, respectivamente. Eles levam mais tempo para treinar e são mais orientados para treinamento generalizado.
+
+-   **DyLoRA:** Abreviação de Dynamic LoRA, esta é uma implementação de LoRA que permite que o Rank mude dinamicamente, mas é um LoRA normal fora isso.
+
+-   **GLoRA:** Abreviação de Generalized LoRA, esta é uma implementação feita para generalizar conjuntos de dados diversos de maneira flexível e capaz.
+
+-   **iA3:** Em vez de afetar o rank como a maioria dos LoRA, o iA3 afeta os vetores aprendidos, resultando em um método de treinamento muito eficiente. Similar (aparentemente um pouco melhor?) a um LoRA normal, em um pacote muito menor.
+
+-   **Diag-OFT:** Esta implementação "preserva a energia hiperesférica treinando transformações ortogonais que se aplicam às saídas de cada camada". Em suma, esse tipo é melhor para preservar o entendimento original do modelo base sobre itens coincidentais ao treinamento (como fundos e poses). Isso também aparentemente converge (treina) mais rápido do que um LoRA padrão.
+
+-   **Afinamento Nativo:** Também conhecido como dreambooth, no qual não estamos focando e vamos ignorar para este guia. A implementação do LyCORIS permite que seja usado como um LoRA, mas produz arquivos **muito** grandes.
+
 
 "Então, o que devo usar?"
 
-Eu diria pessoalmente que cada um tem seus próprios usos, então os categorizei semi-geralmente. Ainda não tenho muito conhecimento sobre suas minúcias, mas **baseei-me amplamente nas notas e documentações de implementação _oficiais_**. O que você escolher depende de você e é totalmente baseado em suas necessidades.
+Eu diria pessoalmente que cada um tem seus próprios usos, então eu os categorizei de forma semi-geral. Ainda não sou super conhecedor das suas complexidades, mas **me baseei principalmente nas notas de implementação _oficiais_ e na documentação.** O que você escolhe depende de você e é inteiramente baseado nas suas necessidades.
 
--   **Propósito Geral:**
+-   **Uso Geral:**
     
     -   LoCON, DyLoRA, iA3, Diag-OFT
-        
--   **Multi-Conceito:**
+
+-   **Múltiplos Conceitos:**
     
     -   LoCON, LoHa, LoKR
-        
+
 -   **Conceitos:**
     
     -   LoCON, LoHa, LoKR, GLoRA
-        
+
 -   **Estilos:**
     
     -   LoCON, GLoRA, iA3
-        
+
 
 **Benefícios, Desvantagens e Notas de Uso:**
 
 -   **LoCON:**
-    
     -   Amplamente Aplicável
-        
+
     -   Afeta Mais Camadas do Modelo
-        
-    -   Arquivos Levemente Maiores
-        
-    -   Basicamente Apenas Um LoRA, Mas Melhor
-        
-        -   Dim <= 64 Máximo, 32 Recomendado
-            
-        -   Alpha >= 0.01, Metade Recomendado (Quando não estiver usando um otimizador adaptativo)
-            
+
+    -   Arquivos Ligeiramente Maiores
+
+    -   Basicamente Apenas um LoRA, Mas Melhor
+
+      -   Dim <= 64 Máximo, 32 Recomendado
+
+      -   Alpha >= 0.01, Metade Recomendado (Quando não estiver usando um otimizador adaptativo)
+
+
 -   **LoHa & LoKR:**
-    
-    -   Bom Com Treinamento Multi-Conceito
-        
-    -   Bom Com Generalização
-        
+
+    -   Bom Para Treinamento de Múltiplos Conceitos
+
+    -   Bom Para Generalização
+
     -   Tempos de Treinamento Mais Longos
-        
-    -   Ruim Com Conceitos Altamente Detalhados
-        
+
+    -   Ruim Para Conceitos Altamente Detalhados
+
     -   Pode Ser Difícil de Transferir
-        
-        -   LoHa
-            
-            -   Dim <= 32
-                
-            -   Alpha >= 0.01, Metade Recomendado (Quando não estiver usando um otimizador adaptativo)
-                
-        -   LoKR
-            
-            -   Pequeno: Fator = -1
-                
-            -   Grande: Fator = ~8
-                
+
+      -   LoHa
+
+        -   Dim <= 32
+
+        -   Alpha >= 0.01, Metade Recomendado (Quando não estiver usando um otimizador adaptativo)
+
+      -   LoKR
+
+        -   Pequeno: Fator = -1
+
+        -   Grande: Fator = ~8
+
 -   **DyLoRA:**
-    
+
     -   Encontra Automaticamente o Rank Ótimo
-        
+
     -   Tempos de Treinamento Mais Longos
-        
-    -   De Outra Forma Apenas Um LoRA
-        
-        -   Use com Dim grande (~128), Alpha Metade (Quando não estiver usando um otimizador adaptativo)
-            
-        -   Use Acumulação de Gradiente
-            
-        -   Tamanho do Lote Máximo de 1
-            
+
+    -   Fora isso, Apenas um LoRA
+
+      -   Use com Dim grande (~128), Alpha pela metade (Quando não estiver usando um otimizador adaptativo)
+
+      -   Use Acumulação de Gradiente
+
+      -   Tamanho de Lote de 1 Máximo
+
 -   **GLoRA:**
-    
-    -   Muito Bom Em Generalização (Estilos e Conceitos)
-        
+
+    -   Muito Bom em Generalização (Estilos e Conceitos)
+
     -   Tempos de Treinamento Mais Curtos (?, A Testar)
-        
-    -   Não Muito Bom Em Treinar Assuntos Não Generalizados
-        
+
+    -   Não Muito Bom em Treinar Assuntos Não Generalizados
+
 -   **iA3:**
-    
+
     -   Tamanhos de Arquivo Muito Pequenos
-        
+
     -   Geralmente Aplicável
-        
-    -   Geralmente Desempenha Melhor Que LoRA
-        
-    -   Bom Com Estilos
-        
+
+    -   Geralmente Desempenha Melhor que LoRA
+
+    -   Bom com Estilos
+
     -   Pode Ser Difícil de Transferir
-        
-        -   Use com Alta LR (High LR) []Quando não estiver usando um adaptive optimizer], a implementação oficial recomenda 5e-3 (0.005) ~ 1e-2 (0.01)
-            
--   **Diag-OFT:**
     
+      -   Use com Alta LR (Quando não estiver usando um otimizador adaptativo), a implementação oficial recomenda 5e-3 (0.005) ~ 1e-2 (0.01)
+
+-   **Diag-OFT:**
+
     -   Tempo de Treinamento Mais Rápido
-        
-    -   Melhor Preserva Coincidências
-        
+
+    -   Melhor Preserva Coincidentes
+
     -   Geralmente Aplicável
-        
+    
 
 ## Parte 8 | Treinamento Avançado: Estilos e Temas
 
-Então, você quer treinar um estilo de algum tipo. Independentemente do que seja, para conceitos mais amplos, um LyCORIS é a ferramenta ideal, mas ao contrário de um LoRA, há vários tipos de LyCORIS para escolher. Se você pulou a Parte 7, recomendo um LoCON, GLoRA ou iA3.
+Então, você quer treinar um estilo de algum tipo. Independentemente do que seja, para conceitos mais amplos, um LyCORIS é a ferramenta certa para o trabalho, mas, ao contrário de um LoRA, existem vários tipos de LyCORIS para escolher. Se você pulou a Parte 7, recomendo um LoCON, GLoRA ou iA3.
 
-Depois de escolher seu tipo, certifique-se de que seu rank está definido para 32 ou menos. LyCORIS parece ter alguns problemas acima de certos pontos (embora você possa ir até 64, acredito), mas 32 é o máximo geralmente aceito antes de começar a ter problemas.
+Depois de escolher seu tipo, certifique-se de que seu rank esteja definido para 32 ou menos. LyCORIS parece ter alguns problemas acima de certos pontos (embora você possa ir até 64, acredito), mas 32 é o máximo geralmente aceito antes de começar a ter problemas.
 
-Agora que isso está fora do caminho, você deve começar a construir um conjunto de dados, assim como antes. No entanto, treinamentos de estilo se beneficiam muito mais de conjuntos de dados maiores, então, em vez da faixa de 15-50 de antes, procure obter cerca de 50-200, na minha experiência, 125-150 é um bom lugar para estar.
+Agora que isso está fora do caminho, você deve começar a construir um conjunto de dados, assim como antes. No entanto, treinamentos de estilo se beneficiam muito mais de conjuntos de dados maiores, então, em vez da faixa de 15-50 de antes, procure ter entre 50-200, na minha experiência 125-150 é um bom lugar para estar.
 
-Depois de conseguir suas imagens, comece a marcá-las. Você pode geralmente marcar da mesma maneira que antes, mas lembre-se de que você quer o estilo, não um personagem ou artigo de roupa. Você deve especialmente garantir que marque fundos, roupas e qualquer outro elemento chave.
+Depois de obter suas imagens, comece a taguear. Você pode geralmente taguear da mesma maneira que antes, mas lembre-se de que você quer o estilo, não um personagem ou artigo de roupa. Você deve especialmente certificar-se de taguear fundos, roupas e qualquer outro elemento-chave.
 
-Depois de marcar, você está pronto para começar a treinar. Na minha experiência, esses geralmente levam menos épocas para treinar em comparação a um LoRA: Embora eu recomende ~100 repetições para um LoRA, esses geralmente estão ok com ~30-40 repetições, mas sua experiência pode variar, dado o tamanho e composição do seu conjunto de dados.
+Depois de taguear, você está pronto para começar o treinamento. Na minha experiência, esses geralmente levam menos épocas para treinar em comparação com um LoRA: Enquanto recomendo ~100 repetições para um LoRA, esses geralmente estão ok com ~30-40 repetições, mas seus resultados podem variar, dado o tamanho e composição do seu conjunto de dados.
 
-## Registro de Alterações
+## Parte 9 | Pós-Treinamento: Redimensionamento de LoRA (SDXL)
+
+Como muitas pessoas notarão, os loras do SDXL são _grandes_. Eles ocupam muito mais espaço do que os loras 1.5, consumindo aqueles preciosos gigabytes do seu armazenamento. Felizmente, temos uma solução: Redimensionamento.
+
+Embora esse processo seja totalmente opcional, você _pode_ reduzir o tamanho do arquivo _significativamente_ e _sem perda_, também!
+
+Embora os scripts do Kohya tenham uma maneira de fazer isso, eles são _lentos e otimizados_, então usaremos um novo projeto de um membro do FD, Gaeros. Atualmente, este projeto só suporta SDXL **LoRAs e LoCONs** **apenas**, mas o suporte para outros métodos pode vir no futuro. Baixe o projeto de seu [Github](https://github.com/elias-gaeros/resize_lora/tree/main), e certifique-se de ter suas dependências instaladas.
+
+Depois de instalado, abra uma janela do powershell/cmd na pasta instalada e insira o seguinte após ajustá-lo:
+
+```
+python resize_lora.py /caminho/para/o/checkpoint.safetensors /caminho/para/o/lora.safetensors -o /caminho/para/a/pasta/de/saída -r spn_ckpt=1,thr=-1.4
+```
+
+Que deve parecer algo assim, quando preenchido corretamente:
+
+```
+python resize_lora.py G:\stable-diffusion-webui\models\Stable-diffusion\ponyDiffusionV6XL.safetensors G:\LoRA_Output\MH_Dodogama_a1_8_PonyXL.safetensors -o G:\LoRA_Output -r spn_ckpt=1,thr=-1.4
+```
+
+Desde que você tenha todas as dependências felizes e apontadas para os arquivos corretos, o programa, na primeira vez, armazenará em cache valores chave do checkpoint selecionado, que ele pode reutilizar quantas vezes forem necessárias ao redimensionar outro lora no mesmo modelo. Esse primeiro cacheamento será o mais longo que você já esperou, pois redimensionamentos futuros levarão segundos literais.
+
+Essas configurações específicas são as minhas preferidas para um redimensionamento seguro e sem perdas, que encontrei funcionar bem em todas as instâncias que testei. Se você estiver com vontade de mexer, pode optar por redimensionamentos mais agressivos, mas a qualidade do seu modelo pode cair, em alguns casos consideravelmente.
+
+## Changelog
+
+12/06/24
+
+-   Parte 4:
+
+    -   Corrigidos alguns pequenos erros gramaticais.
+
+    -   Alteradas as LRs recomendadas para minhas configurações de SDXL.
+
+    -   Adicionadas algumas configurações anteriormente ignoradas.
+
+    -   Adicionadas seções referindo-se ao uso de DoRA.
+
+-   Parte 9:
+
+    -   Criado, cobrindo o redimensionamento de LoRA com minhas próprias configurações.
+
 
 28/05/24
 
 -   Introdução:
-    
-    -   Pequenos ajustes.
-        
+
+    -   Ajustada um pouco.
+
 -   Parte 1:
-    
+
     -   Feitas distinções entre recomendações 1.5 e novas XL.
-        
-    -   Pequenos ajustes de linguagem.
-        
-    -   Adicionada nota de isenção ao meu recomendação do Pixiv.
-        
+
+    -   Ajustada alguma linguagem minoritariamente.
+
+    -   Adicionada nota de aviso à minha recomendação do Pixiv.
+
 -   Parte 2:
-    
-    -   Pequenos ajustes para corrigir erros gramaticais que notei.
-        
-    -   Adicionada pequena quantidade de explicação adicional a algumas seções.
-        
-    -   Adicionado um upscale recomendado.
-        
+
+    -   Ajustes menores para corrigir erros gramaticais que notei.
+
+    -   Adicionada uma pequena quantidade de explicação adicional em algumas seções.
+
+    -   Adicionado um upscaler recomendado.
+
 -   Parte 3:
-    
+
     -   Adicionadas algumas distinções entre SD1.5 e XL.
-        
-    -   Ajustado texto para adicionar ênfase em certas partes.
-        
-    -   Ajustadas algumas palavras na parte 3.5.
-        
-    -   Levemente atualizados exemplos de tags na parte 3.6.
-        
+
+    -   Ajustado alguns textos para adicionar ênfase em certas partes.
+
+    -   Ajustada alguma redação na parte 3.5.
+
+    -   Exemplos de tags ligeiramente atualizados na parte 3.6.
+
 -   Parte 4:
-    
+
     -   bmaltis mudou o layout da GUI, então agora tenho que reescrever as instruções >:(
-        
-        -   Reformatei a maior parte da seção e adotei algumas configurações experimentais na configuração padrão.
-            
-        -   Também adicionei especificidades para minhas configurações de SDXL.
-            
+
+      -   Reformatada a maior parte da seção e adotadas algumas configurações experimentais na configuração padrão.
+
+      -   Também adicionadas especificidades para minhas configurações de SDXL.
+
 
 24/03/24
 
--   Adicionados taxas de aprendizado ausentes para minha configuração AdamW. Oops.
-    
--   Levemente expandida Parte 3.5.
-    
+-   Adicionadas taxas de aprendizado faltantes para minha configuração AdamW. Opa.
+
+-   Parte 3.5 ligeiramente expandida.
+
 
 04/03/24
 
 -   Adicionada seção cobrindo tokens de classe à Parte 3.
-    
--   Mudada Parte 3.5 (Exemplos de marcação) para 3.6.
-    
+
+-   Parte 3.5 (Exemplos de tags) mudada para 3.6.
+
 -   Adicionada nova Parte 3.5, cobrindo Preservação de Prioridade.
-    
+
     -   Adicionada configuração de Pasta de Regularização à Parte 4.
-        
--   Atualizadas configurações experimentais.
-    
+
+-   Configurações experimentais atualizadas.
+
 -   Ajustadas algumas descrições de configurações.
-    
--   Adicionados alguns esclarecimentos em áreas diversas.
-    
+
+-   Adicionadas algumas clarificações em áreas diversas.
+
 
 29/02/24
 
--   Extensa mas geral reestruturação, implementando críticas de outros treinadores, principalmente ArgentVASIMR.
-    
+-   Uma reestruturação extensa, mas no geral menor, implementando críticas de outros treinadores, principalmente ArgentVASIMR.
+
     -   Parte 1:
-        
-        -   Expandida sobre Imagens Duo/Trio/Grupo.
-            
+
+      -   Expandido sobre imagens de Duo/Trio/Grupo.
+
     -   Parte 2:
-        
-        -   Expandido/editado vários parágrafos para fornecer mais alternativas e informações mais claras.
-            
+
+      -   Expandido/editado vários parágrafos para fornecer mais alternativas e informações mais claras.
+
     -   Parte 3:
-        
-        -   Pequenas edições, mudado terminologia para ser mais apropriada.
-            
+
+      -   Edições menores, terminologia mudada para ser mais apropriada.
+
     -   Parte 4:
-        
-        -   Ajustadas algumas configurações, principalmente em relação ao uso de otimização Adam.
-            
-        -   Adicionado um pouco mais de descrição a algumas configurações.
-            
-        -   Adicionados parâmetros para embaralhamento de legendas.
-            
-        -   Adicionada seção experimental sobre escalonamento alpha quando não se utiliza otimizadores adaptativos.
-            
+
+      -   Ajustadas algumas configurações, principalmente em relação ao uso do Adam opt.
+
+      -   Adicionada um pouco mais de descrição para algumas configurações.
+
+      -   Adicionados parâmetros para embaralhamento de legendas.
+
+      -   Adicionada seção experimental sobre escalonamento alfa quando não estiver usando otimizadores adaptativos.
+
     -   Parte 5:
-        
-        -   Ajustadas algumas palavras para melhor aderir aos termos corretos.
-            
-        -   Ajustada Q&A em relação ao treinamento completo fp16.
-            
+
+      -   Ajustada alguma redação para aderir melhor aos termos adequados.
+
+      -   Ajustada Q&A sobre treinamento fp16 completo.
+
     -   Parte 6:
-        
-        -   Ajustada alguma terminologia, novamente.
-            
-        -   Levemente alterada e fornecido um exemplo para a fórmula de balanceamento de conjunto de dados.
-            
+
+      -   Ajustada alguma terminologia, de novo.
+
+      -   Ligeiramente alterada e fornecido um exemplo para a fórmula de balanceamento de conjunto de dados.
+
 
 26/02/24
 
 -   Configurações experimentais atualizadas.
-    
--   Ajustadas algumas explicações pequenas em relação ao LyCORIS.
-    
+
+-   Ajustadas algumas explicações ligeiramente em relação ao LyCORIS.
+
 
 09/02/24
 
 -   Configurações experimentais atualizadas.
-    
+
 -   Adicionados mais detalhes à parte 4.
-    
--   Adicionada breve seção sobre algumas novas descobertas na parte 2.
-    
+
+-   Adicionada uma breve seção sobre algumas novas descobertas à parte 2.
+
 
 01/02/24
 
 -   Adicionada parte 2.5, uma subseção sobre Nightshade e outros "venenos" de IA.
-    
+
 
 07/01/24
 
--   Movida parte 7 para parte 8 & removida explicação de LyCORIS.
-    
--   Adicionada (nova) parte 7, aprofundando mais sobre LyCORIS.
-    
--   Ajustadas configurações experimentais.
-    
+-   Parte 7 movida para parte 8 e explicação do LyCORIS removida.
+
+-   Adicionada (nova) parte 7, aprofundando mais no LyCORIS.
+
+-   Ajustadas algumas configurações experimentais.
+
 
 05/01/24
 
--   Ajustadas configurações experimentais & adicionadas algumas explicações para alguns valores.
-    
+-   Configurações experimentais ajustadas e adicionadas algumas explicações para alguns valores.
+
 -   Adicionadas perguntas de Q&A.
-    
--   Expandido sobre o valor "normas de peso de escala" na parte 4.
-    
+
+-   Expandido sobre o valor "normas de peso da escala" na parte 4.
+
 -   Corrigidas seções sobre minsnr e zsnr para diferenciá-las corretamente.
-    
--   Ajustado "parâmetros adicionais": Valor não mais necessário.
-    
+
+-   Ajustados "parâmetros adicionais": Valor não é mais necessário.
+
 
 30/12/23
 
 -   Adicionadas configurações experimentais à parte 4.
-    
--   Alterado título para incluir LyCORIS.
-    
+
+-   Título mudado para incluir LyCORIS.
+
 -   Adicionada pergunta de Q&A.
-    
+
 
 28/12/23
 
 -   Correção de mais erros gramaticais.
-    
--   Levemente expandida Parte 1 e 2.
-    
--   Adicionada seção cobrindo tags implícitas à Parte 3.
-    
+
+-   Parte 1 e 2 ligeiramente expandidas.
+
+-   Adicionada seção sobre tags implícitas à Parte 3.
+
 -   Adicionadas pequenas elaborações em algumas áreas.
-    
+
 
 27/12/23
 
 -   Correção de pequenos erros gramaticais nas partes 3 e 4.
-    
+
 -   Adicionadas novas perguntas de Q&A.
-    
--   Adicionadas partes 6 e 7, cobrindo treinamento Multi-conceito e Estilo respectivamente.
-    
--   Adicionada parte 3.5 para exemplos de marcação, adicionados dois para começar.
-    
+
+-   Adicionadas partes 6 e 7, cobrindo Treinamento de Múltiplos Conceitos e Estilos, respectivamente.
+
+-   Adicionada parte 3.5 para exemplos de tags, adicionados dois para começar.
+
 
 26/12/23
 
--   Guia criado
+-   Guia Criado
+
 <p>
 </p>
 
@@ -1607,3 +1661,69 @@ Recentemente, tentei usar IA3 para treinar LyCORIS (personagens
 animados com 6-9 roupas)\
 Comparado com dim8/1 LoHA, seu tamanho de arquivo é surpreendentemente menor,
 nem mesmo 1/10 é necessário, e é muito rápido.
+
+---
+
+> [**thebrownsauce184**](https://civitai.com/user/thebrownsauce184)
+Você pode fazer um com imagens da interface do civitai? Eu aprendo visualmente. Tipo, sou meio burro.
+
+>> [**Valstrix - OP**](https://civitai.com/user/Valstrix)
+Hmm, eu posso ver sobre adicionar visuais, sim. Vou dar uma olhada nisso em breve(tm)
+
+>>> [**thebrownsauce184**](https://civitai.com/user/thebrownsauce184)
+Show!
+
+---
+
+> [**pihlawrkr738**](https://civitai.com/user/pihlawrkr738)
+Guia fantástico, muito útil, obrigado. Algumas coisas eu descobri por conta própria através de falhas, então queria ter olhado isso antes haha.
+
+---
+
+> [**Loraman**](https://civitai.com/user/Loraman)
+Ótimo guia, obrigado! Tentei fazer um GLoRA para um estilo de arte com as configurações recomendadas, 2500 passos e 200 imagens (por exemplo, prodigy, 32/32), mas o treinamento não parece captar o estilo de arte tão bem quanto o treinador de LORA no site. Não tenho certeza de onde errei, você tem alguma dica?
+
+>> [**Valstrix - OP**](https://civitai.com/user/Valstrix)
+Fico feliz que tenha ajudado! Mas não tenho ideia de quais configurações o treinador no site usa, então não tenho certeza de onde eles diferem. Eu não sou o mais experiente em treinamento de estilo também, daí minha pequena seção sobre isso, haha. Algumas coisas que me vêm à mente para você verificar/tentar são:
+>> 1. Dê uma olhada rápida nos seus dados e certifique-se de que nenhuma imagem desvie muito da norma estilística, mesmo que sejam tecnicamente do mesmo estilo. Isso pode (às vezes) atrapalhar o treinamento.
+>> 2. Tente um tipo diferente de LyCORIS, como o LoCON - Eles são mais de uso geral, e é possível que minhas configurações não funcionem tão bem com GLoRAs, não tive a oportunidade de testá-los de forma significativa.
+>> 3. Compare minhas configurações com as configurações padrão do site: Tenho quase certeza de que você pode abrir uma aba "avançada" em algum lugar no treinador do site para ver melhor. Qualquer desvio significativo provavelmente estará nas configurações de LR, Dim/Alpha e otimizador. Potencialmente, você poderia trocar os valores deles pelos meus, o que pode funcionar melhor para estilos neste caso - Ficarei feliz em saber se funcionar!
+>> 4. Deixe treinar por mais tempo: O tempo necessário para treinar sempre varia com o seu conjunto de dados, então é possível que com minhas configurações ele só precise de mais tempo para absorver as informações. Se você salvar épocas intermediárias, geralmente é melhor, na minha opinião, prolongar o treinamento e depois retroceder época por época para encontrar a melhor variação.
+
+>>> [**Loraman**](https://civitai.com/user/Loraman)
+Obrigado pelas informações! Vou tentar novamente com as configurações de LORA do Civitai. Vou postar outra resposta aqui se conseguir resolver.
+
+---
+
+> [**QwiziRAM**](https://civitai.com/user/QwiziRAM)
+Estou correto ao aplicar todas as mesmas configurações para PonyXL como fazemos para SDXL?
+E que o PDXL usa E6 e não Booru Tag também é verdade? (Então usamos "side view" em vez de "from side" por exemplo).
+
+>> [**thebrownsauce184**](https://civitai.com/user/thebrownsauce184)
+Pony precisa que Clip skip esteja definido para 2, defina o VAE para sdxl_vae (baixe se você não tiver), eu acho que o Euler A é o melhor sampler, use um número menor de passos com o pony (mesmo um passo a mais ou a menos pode fazer uma grande diferença), CFG definido para 7 ou abaixo funciona melhor para mim. No entanto, você deve realmente ler as configurações recomendadas para cada modelo, pois cada um é treinado para funcionar de maneira diferente. Booru tags como "1girl" etc ainda são necessárias, mas sim "side view" e algumas prompts mais ao estilo SDXL podem e devem ser usadas, especialmente em relação ao fotorrealismo.
+Espero que ajude.
+
+---
+
+> [**justafish**](https://civitai.com/user/justafish)
+como você etiquetaria imagens de duo ao treinar um único personagem? devo manter todas as tags para os outros personagens?
+e há muitas tags de duo como human on anthro, human on female, etc, quais devo manter?
+
+>> [**Valstrix - OP**](https://civitai.com/user/Valstrix)
+Geralmente, uso algumas tags para o personagem não treinado, apenas o suficiente para diferenciá-los, o que fica algo como "duo, human, male, X hair, human on anthro" ou similar. Como uma nota geral, "human on anthro" é uma das tags mais fortes para usar com esse tipo de pareamento, enquanto outras como "human on female" devem ser redundantes a partir das suas outras tags. Além disso, se o sujeito não treinado do duo for um personagem específico, eu não o etiqueto especificamente, pois esse não é o objetivo do treinamento e essas tags podem ser inconsistentes entre checkpoints.
+
+---
+
+> [**QwiziRAM**](https://civitai.com/user/QwiziRAM)
+Havia uma pergunta sobre o item:
+"Taxa de aprendizado do codificador de texto e do Unet":
+SD1.5 AdamW: Eu defini esses valores para 0.00005 e 0.0001, respectivamente.
+SDXL: 0.0001 & 0.0003
+Eu entendo corretamente que com o otimizador Prodigy você só precisa definir 1 e 1? Porque quando tento definir 0.0001 & 0.0003, recebo o seguinte erro.
+Definir valores diferentes de lr em diferentes grupos de parâmetros é suportado apenas para valores de 0
+(Planejo treinar no PonyXL).
+
+>> [**Valstrix - OP**](https://civitai.com/user/Valstrix)
+Sim: Eu digo especificamente na seção "taxa de aprendizado" acima que o valor deve ser 1 para Prodigy e outros otimizadores adaptativos, as taxas de aprendizado especificadas são codificadas por cores para configurações alternativas.
+
+---
